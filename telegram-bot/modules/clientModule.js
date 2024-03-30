@@ -1,4 +1,4 @@
-const { Composer,Keyboard } = require("grammy");
+import { Composer,Keyboard } from "grammy"
 
 const bot = new Composer();
 
@@ -12,4 +12,4 @@ pm.command('client', async (ctx)=>{
 
 
 
-module.exports = bot;
+export default bot;

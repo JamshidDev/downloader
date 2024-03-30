@@ -1,6 +1,7 @@
-const { webhookCallback } = require('grammy');
-const express = require('express');
-const {bot,token} =require('./telegram-bot/bot')
+import { webhookCallback } from "grammy"
+import express from "express"
+import {bot,token} from "./telegram-bot/bot.js"
+import "./config/mongodb.js";
 
 
 const app = express()

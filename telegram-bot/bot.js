@@ -1,8 +1,13 @@
-const { Bot, webhookCallback } = require('grammy');
-require('dotenv').config();
-const admin_bot = require("./modules/adminModule");
-const client_bot = require("./modules/clientModule");
-const config_bot = require("./modules/configModule");
+import { Bot, webhookCallback} from "grammy"
+import dotenv from 'dotenv';
+dotenv.config();
+
+
+import adminModule from "./modules/adminModule.js"
+import clientModule from "./modules/clientModule.js"
+import configModule from "./modules/configModule.js"
+import channelModule from "./modules/channelModule.js"
+
 
 
 
@@ -16,25 +21,26 @@ let _WEBHOOK_URL = `${_DOMAIN}/${_TOKEN}`;
 
 
 
-
-const bot = new Bot(_TOKEN);
-
-
-
-
-
-bot.use(config_bot);
-bot.use(client_bot);
-bot.use(admin_bot);
+ const bot = new Bot(_TOKEN);
 
 
 
 
 
+bot.use(configModule);
+bot.use(channelModule);
+bot.use(clientModule);
+bot.use(adminModule);
 
 
-bot.api.setWebhook(_WEBHOOK_URL).then((res)=>{
-    console.log(`Webhook set to ${_WEBHOOK_URL}`);
+
+
+
+
+
+const allow_updates = ["my_chat_member", "chat_member", "message", "callback_query", "inline_query"];
+bot.api.setWebhook(_WEBHOOK_URL, allow_updates).then((res)=>{
+    console.log(`Webhook bot set to ${_WEBHOOK_URL}`);
 }).catch((error)=>{
     console.log(error)
 });
@@ -45,8 +51,6 @@ bot.catch((err) => {
     console.error(`Error while handling update ${ctx.update.update_id}:`);
 });
 
-module.exports = {bot, token:_TOKEN};
+let token = _TOKEN;
 
-
-
-
+export {bot, token};
