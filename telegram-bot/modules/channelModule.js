@@ -46,11 +46,11 @@ bot.on("my_chat_member", async (ctx) => {
     }
 });
 
-bot.use(async (ctx, next)=>{
-    const chatMembers = await ctx.chatMembers.getChatMember(-1001704079922, ctx.from.id);
-    console.log(chatMembers.status)
-    next()
-})
+// bot.use(async (ctx, next)=>{
+//     const chatMembers = await ctx.chatMembers.getChatMember(-1001704079922, ctx.from.id);
+//     console.log(chatMembers.status)
+//     next()
+// })
 
 
 

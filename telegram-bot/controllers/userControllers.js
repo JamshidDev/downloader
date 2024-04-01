@@ -14,6 +14,7 @@ const store = async (data) => {
             message: "Successfully created or updated",
         }
     } catch (error) {
+        console.log(error)
         return {
             success:false,
             message: error,
@@ -34,10 +35,12 @@ const remove = async (telegramId) => {
             message: "Successfully removed",
         }
     } catch (error) {
+        console.log(error)
         return {
             success:false,
             message: error,
         }
+
     }
 }
 

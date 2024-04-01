@@ -1,5 +1,5 @@
-import { Composer, MemorySessionStorage, session,Keyboard } from "grammy"
-import { I18n, hears } from "@grammyjs/i18n"
+import { Composer, MemorySessionStorage, session } from "grammy"
+import { I18n} from "@grammyjs/i18n"
 import {chatMembers } from "@grammyjs/chat-members"
 import {conversations} from "@grammyjs/conversations"
 
