@@ -1,17 +1,48 @@
 import { webhookCallback } from "grammy"
 import express from "express"
+import cors from 'cors';
 import {bot,token} from "./telegram-bot/bot.js"
 import "./config/mongodb.js";
+
+import permissionRouter from "./router/permissionRouter.js";
+
 
 
 const app = express()
 app.use(express.json())
+app.use(cors());
+
+
+app.use("/permission",permissionRouter);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 app.use(`/${token}`, webhookCallback(bot, 'express'))
-app.get("/", async (req, res)=>{
-    await  res.json("Ok")
+
+app.use((req, res) => {
+    res.status(404).json({
+        status: false,
+        data: null,
+        message: 'Not found Page :)',
+    })
 })
 
 
