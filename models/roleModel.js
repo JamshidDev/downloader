@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, {Schema} from "mongoose";
 
 const roleSchema = mongoose.Schema({
         name: {
@@ -6,7 +6,7 @@ const roleSchema = mongoose.Schema({
             required: true,
         },
         permissions_list: {
-            type: Array[Object],
+            type: [{ type: Schema.Types.ObjectId, ref: 'PermissionModel'}],
             default: [],
         },
         active: {
@@ -16,8 +16,8 @@ const roleSchema = mongoose.Schema({
     },
     {
         timestamps: {
-            createdAt: "created_at", // Use `created_at` to store the created date
-            updatedAt: "updated_at", // and `updated_at` to store the last updated date
+            createdAt: "created_at",
+            updatedAt: "updated_at",
         },
     }
 );

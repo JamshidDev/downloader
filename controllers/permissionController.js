@@ -48,10 +48,10 @@ const store = async(req,res)=>{
         }
 
     }catch (error){
-        console.log(error)
+        console.log(error.message)
         res.status(500).json({
             success:false,
-            message: error,
+            message: error.message,
         })
     }
 }
@@ -77,8 +77,11 @@ const update = async(req,res)=>{
 }
 const delete_item = async(req,res)=>{
     try{
-        let permission_id = req.params.permission_id;
-        let result = await PermissionModel.findByIdAndUpdate(permission_id, {
+        let permission_id =req.params.permission_id;
+        let result = await PermissionModel.updateOne({
+            _id:permission_id,
+            active: true,
+        }, {
             active: false,
         });
         res.status(200).json({
@@ -91,7 +94,7 @@ const delete_item = async(req,res)=>{
         console.log(error)
         res.status(500).json({
             success:false,
-            message: error,
+            message: error.message,
         })
     }
 }

@@ -1,8 +1,9 @@
-
 import mongoose from "mongoose"
+import RoleModel from "./roleModel.js";
+import {raw} from "express";
 
 const permissionSchema = mongoose.Schema({
-    name:{
+    name: {
         type: String,
         required: true,
     },
@@ -17,7 +18,23 @@ const permissionSchema = mongoose.Schema({
     },
 });
 
+permissionSchema.pre("updateOne", async function (next) {
+    let permission_id = this._conditions._id;
+
+    let existCount = await RoleModel.countDocuments(
+        {
+            permissions_list: {$in: permission_id},
+            active: true
+        }
+    );
+    if (existCount > 0) {
+        return next(new Error('Bu permissionga biriktirilga rollar mavjud!'));
+    } else {
+        return next()
+    }
+})
+
 
 const PermissionModel = mongoose.model('PermissionModel', permissionSchema);
 
-export default  PermissionModel;
+export default PermissionModel;
