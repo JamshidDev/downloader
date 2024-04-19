@@ -10,7 +10,7 @@ const stringType = {
 }
 const boolingType = {
     type: Boolean,
-    default: false,
+    default: true,
 }
 
 const menuRouteSchema = mongoose.Schema({

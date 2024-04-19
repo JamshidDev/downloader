@@ -1,5 +1,5 @@
-import PermissionModel from "../models/permissionModel.js";
 
+import MenuRouteModel from "../models/menuRouteModel.js";
 const index = async(req,res)=>{
     try{
         let page = req.query.page || 1;
@@ -8,9 +8,8 @@ const index = async(req,res)=>{
         let search = req.query?.search || "";
         let totalItem = 0;
 
-        totalItem = await PermissionModel.countDocuments({active:true, name: { $regex: search, $options: "i" },})
-        let result = await PermissionModel.find({active:true, name: { $regex: search, $options: "i" },})
-            .select(`_id name`)
+        totalItem = await MenuRouteModel.countDocuments({active:true, name: { $regex: search, $options: "i" },})
+        let result = await MenuRouteModel.find({active:true, name: { $regex: search, $options: "i" },})
             .sort({ created_at: sort })
             .skip((page - 1) * per_page)
             .limit(per_page);
@@ -32,16 +31,10 @@ const index = async(req,res)=>{
 }
 const store = async(req,res)=>{
     try{
-        let {name} = req.body;
-        let existItem = await PermissionModel.findOne({name, active:true});
+        let data = req.body;
+        let existItem = await MenuRouteModel.findOne({name:data?.name});
         if(!existItem){
-            let items = [
-                {name:`${name}-get`},
-                {name:`${name}-store`},
-                {name:`${name}-update`},
-                {name:`${name}-delete`},
-            ]
-            let result = await PermissionModel.insertMany(items);
+            let result = await MenuRouteModel.create(data)
             res.status(200).json({
                 success:true,
                 message: "Successfully created",
@@ -64,11 +57,9 @@ const store = async(req,res)=>{
 }
 const update = async(req,res)=>{
     try{
-        let {name} = req.body;
-        let permission_id = req.params.permission_id;
-        let result = await PermissionModel.findByIdAndUpdate(permission_id, {
-            name,
-        });
+        let data = req.body;
+        let menuRouteId = req.params.route_id;
+        let result = await MenuRouteModel.findByIdAndUpdate(menuRouteId, data);
         res.status(200).json({
             success:true,
             message: "Successfully updated",
@@ -84,9 +75,9 @@ const update = async(req,res)=>{
 }
 const delete_item = async(req,res)=>{
     try{
-        let permission_id =req.params.permission_id;
-        let result = await PermissionModel.updateOne({
-            _id:permission_id,
+        let menuRouteId =req.params.route_id;
+        let result = await MenuRouteModel.updateOne({
+            _id:menuRouteId,
             active: true,
         }, {
             active: false,

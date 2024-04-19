@@ -1,6 +1,5 @@
 import RoleModel from "../models/roleModel.js";
 
-
 const index = async(req,res)=>{
     try{
         let page = req.query.page || 1;

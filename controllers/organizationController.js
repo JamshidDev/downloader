@@ -1,4 +1,4 @@
-import PermissionModel from "../models/permissionModel.js";
+import OrganizationModel from "../models/orgnizationModel.js";
 
 const index = async(req,res)=>{
     try{
@@ -8,9 +8,8 @@ const index = async(req,res)=>{
         let search = req.query?.search || "";
         let totalItem = 0;
 
-        totalItem = await PermissionModel.countDocuments({active:true, name: { $regex: search, $options: "i" },})
-        let result = await PermissionModel.find({active:true, name: { $regex: search, $options: "i" },})
-            .select(`_id name`)
+        totalItem = await OrganizationModel.countDocuments({active:true, name: { $regex: search, $options: "i" },})
+        let result = await OrganizationModel.find({active:true, name: { $regex: search, $options: "i" },})
             .sort({ created_at: sort })
             .skip((page - 1) * per_page)
             .limit(per_page);
@@ -32,41 +31,36 @@ const index = async(req,res)=>{
 }
 const store = async(req,res)=>{
     try{
-        let {name} = req.body;
-        let existItem = await PermissionModel.findOne({name, active:true});
+        let data = req.body;
+        let existItem = await OrganizationModel.findOne({name:data?.name, active:true});
         if(!existItem){
-            let items = [
-                {name:`${name}-get`},
-                {name:`${name}-store`},
-                {name:`${name}-update`},
-                {name:`${name}-delete`},
-            ]
-            let result = await PermissionModel.insertMany(items);
+            let result = await OrganizationModel.create(data);
             res.status(200).json({
                 success:true,
                 message: "Successfully created",
-                data:result,
+                data:result
             })
         }else{
-            res.status(400).json({
+            res.status(200).json({
                 success:false,
                 message: "Already exist item",
             })
         }
 
+
     }catch (error){
-        console.log(error.message)
+        console.log(error)
         res.status(500).json({
             success:false,
-            message: error.message,
+            message:error.message,
         })
     }
 }
 const update = async(req,res)=>{
     try{
-        let {name} = req.body;
-        let permission_id = req.params.permission_id;
-        let result = await PermissionModel.findByIdAndUpdate(permission_id, {
+        let {name,permissions_list} = req.body;
+        let organization_id = req.params.organization_id;
+        let result = await OrganizationModel.findByIdAndUpdate(organization_id, {
             name,
         });
         res.status(200).json({
@@ -84,9 +78,9 @@ const update = async(req,res)=>{
 }
 const delete_item = async(req,res)=>{
     try{
-        let permission_id =req.params.permission_id;
-        let result = await PermissionModel.updateOne({
-            _id:permission_id,
+        let organization_id =req.params.organization_id;
+        let result = await OrganizationModel.updateOne({
+            _id:organization_id,
             active: true,
         }, {
             active: false,
@@ -106,4 +100,4 @@ const delete_item = async(req,res)=>{
     }
 }
 
-export {store, index,update, delete_item};
+export  {store,index, update,delete_item};
