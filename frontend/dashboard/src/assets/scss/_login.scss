@@ -1,0 +1,27 @@
+
+.login-page{
+  .login-input{
+    @apply bg-dark #{!important};
+    .n-input__state-border{
+      @apply border-surface-600 #{!important};
+    }
+    .n-input__input-el{
+      @apply text-surface-400 #{!important};
+    }
+
+
+
+  }
+  .n-input--focus {
+    .n-input__state-border{
+      @apply border-primary #{!important};
+    }
+    .n-input__input-el{
+      @apply text-white #{!important};
+    }
+    .n-input__placeholder> span{
+      @apply placeholder-blue-400 #{!important};
+    }
+
+  }
+}
