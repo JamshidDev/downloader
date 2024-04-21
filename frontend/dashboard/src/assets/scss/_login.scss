@@ -3,22 +3,32 @@
   .login-input{
     @apply bg-dark #{!important};
     .n-input__state-border{
-      @apply border-surface-600 #{!important};
+      @apply border-surface-800 #{!important};
     }
     .n-input__input-el{
       @apply text-surface-400 #{!important};
+      background-color: transparent !important;
+      &:-webkit-autofill:focus {
+        -webkit-text-fill-color: $white-color !important;
+        background-color: #24262d !important;
+
+      }
+      &:-webkit-autofill {
+        -webkit-text-fill-color: var(--surface-500) !important;
+        transition: background-color 5000s ease-in-out 0s;
+      }
+      caret-color: $primary-color;
     }
-
-
 
   }
   .n-input--focus {
     .n-input__state-border{
-      @apply border-primary #{!important};
+      @apply border-primary border-[2px] #{!important};
+
     }
-    .n-input__input-el{
-      @apply text-white #{!important};
-    }
+    //.n-input__input-el{
+    //  @apply text-white #{!important};
+    //}
     .n-input__placeholder> span{
       @apply placeholder-blue-400 #{!important};
     }

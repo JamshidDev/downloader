@@ -4,3 +4,9 @@
 @import "scss/tailwand";
 @import "scss/login";
 @import "scss/overwrite";
+
+*{
+  font-family: var(--public-sans) !important;
+  font-style: normal;
+  font-weight: 500;
+}
