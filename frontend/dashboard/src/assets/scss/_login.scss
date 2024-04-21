@@ -1,7 +1,7 @@
 
 .login-page{
   .login-input{
-    @apply bg-dark #{!important};
+    @apply bg-bluegray-900 #{!important};
     .n-input__state-border{
       @apply border-surface-800 #{!important};
     }

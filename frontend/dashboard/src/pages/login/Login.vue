@@ -1,4 +1,15 @@
 <script setup>
+import {ref} from "vue";
+
+const authFields =ref({
+  login:null,
+  password:null,
+});
+const loading = ref(false);
+
+function auth(){
+    loading.value = true;
+}
 
 </script>
 
@@ -17,15 +28,15 @@
       <div class="grid grid-cols-1 gap-y-6 mt-[80px]">
         <div>
           <label for="login" class="text-sm text-surface-500 mb-1 block pl-4">Login yoki username</label>
-          <n-input round name="login" aria-autocomplete="none" class="login-input" size="large" placeholder="Login"/>
+          <n-input v-model="authFields.login" round name="login" aria-autocomplete="none" class="login-input" size="large" placeholder="Login"/>
         </div>
         <div>
           <label for="login" class="text-sm text-surface-500 mb-1 block pl-4">Password</label>
-          <n-input round name="password" type="password" show-password-on="mousedown" class="login-input" size="large"
+          <n-input v-model="authFields.password" round name="password" type="password" show-password-on="mousedown" class="login-input" size="large"
                    placeholder="Password"/>
         </div>
         <div class="mt-10">
-          <n-button :loading="true" class="w-full" type="info" round size="large">
+          <n-button @click="auth()" :loading="loading" class="w-full" type="info" round size="large">
             Tizimga kirish
           </n-button>
         </div>
@@ -34,8 +45,9 @@
 
     </div>
     <div class="w-full absolute bottom-0 h-[50px] left-0 border-t border-surface-800 flex justify-center items-center">
-      <img class="xl:w-[30px] lg:w-[30px] md:w-[30px] w-[24px] xl:h-[30px] lg:h-[30px] md:h-[30px] h-[24px]" src="@/resourse/logo/logo.png" alt="">
-      <span class="text-surface-600 font-semibold xl:text-base lg:text-base  text-xs ml-4">Admin Dashboard</span>
+      <img class="xl:w-[30px] lg:w-[30px] md:w-[30px] w-[24px] xl:h-[30px] lg:h-[30px] md:h-[30px] h-[24px]"
+           src="@/resourse/logo/logo.png" alt="">
+      <span class="text-surface-600 font-medium xl:text-base lg:text-base  text-xs ml-4">Admin Dashboard</span>
     </div>
 
   </div>

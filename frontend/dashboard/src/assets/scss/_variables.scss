@@ -12,6 +12,8 @@
 
   --surface-ground:#f8fafc;
 
+  --sidebar-color:#1e293b;
+
   //fonts
   --public-sans:"Public Sans", sans-serif;
   --poppins:"Poppins", sans-serif;
@@ -170,3 +172,7 @@ $danger-color:var(--danger-color);
 $dark-color:var(--dark-color);
 $secondary-color:var(--secondary-color);
 $white-color:var(--white-color);
+
+$sidebar-max-width:260px;
+$sidebar-min-width:80px;
+$breakpoint-sidebar:1000px;
