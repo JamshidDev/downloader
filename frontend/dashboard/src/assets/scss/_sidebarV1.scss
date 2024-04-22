@@ -1,0 +1,116 @@
+
+//sidebar style
+@media only screen and (min-width: calc($breakpoint-sidebar + 0.1px)){
+
+  .sidebar-content-v1{
+    transition: all ease 0.3s;
+    .item-title{
+      width: calc(100% - 40px);
+    }
+    .item-icon{
+      width: 40px;
+    }
+    .single-item-tooltip{
+      position: absolute;
+      overflow: hidden;
+      opacity: 0;
+      left: 60px;
+      top: 0;
+      background-color: var(--sidebar-color);
+      transition: left 0.2s ease;
+      width: 180px;
+    }
+  }
+  .open_sidebar{
+    .sidebar-content-v1{
+      transition: all ease 0.3s;
+      .item-title{
+        width: calc(100% - 40px);
+      }
+      .item-icon{
+        width: 40px;
+      }
+    }
+  }
+  .close_sidebar{
+    .sidebar-content-v1{
+      .item-title{
+        width: 0;
+        padding-left: 0 !important;
+      }
+      .item-icon{
+        width:44px !important;
+      }
+      .item-panel{
+        position: absolute;
+        left:60px;
+        top:0;
+        z-index: 99;
+        background-color: var(--sidebar-color);
+        border-radius: 12px;
+        opacity: 0;
+        height: auto !important;
+        pointer-events: none;
+        padding: 4px 10px;
+      }
+      .multiple-item:hover .item-panel{
+        opacity: 1;
+        left: 44px;
+        pointer-events: all !important;
+      }
+      .single-item:hover .single-item-tooltip{
+        position: absolute;
+        left: 44px;
+        opacity: 1;
+        pointer-events: all;
+      }
+
+    }
+
+  }
+}
+
+@media only screen and (max-width: $breakpoint-sidebar){
+  .sidebar-content-v1{
+    transition: all ease 0.3s;
+    .item-title{
+      width: calc(100% - 40px);
+    }
+    .item-icon{
+      width: 40px;
+    }
+    .single-item-tooltip{
+      position: absolute;
+      overflow: hidden;
+      opacity: 0;
+      left: 60px;
+      top: 0;
+      background-color: var(--sidebar-color);
+      transition: left 0.2s ease;
+    }
+  }
+}
+.sidebar-content-v1{
+  .item-panel{
+    transition: height 0.2s ease-in, left 0.2s ease-in, pointer-events 0.5s ease-in;
+  }
+}
+
+.single-item:hover{
+  color: var(--bluegray-200);
+}
+.multiple-item:hover{
+  .item-header{
+    color: var(--bluegray-200);
+  }
+
+}
+.item-panel-items:hover{
+  color: var(--bluegray-200);
+}
+
+.active-item{
+  background-color: rgba(135, 165, 255, 0.07) !important;
+  border: 1px solid rgba(151, 178, 255, 0.15) !important;
+}
+

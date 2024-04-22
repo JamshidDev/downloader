@@ -10,7 +10,7 @@
   --secondary-color: #eef0f7;
   --white-color: #ffffff;
 
-  --surface-ground:#f8fafc;
+  --surface-ground:#f2f6f9;
 
   --sidebar-color:#1e293b;
 
@@ -173,6 +173,6 @@ $dark-color:var(--dark-color);
 $secondary-color:var(--secondary-color);
 $white-color:var(--white-color);
 
-$sidebar-max-width:260px;
-$sidebar-min-width:80px;
+$sidebar-max-width:240px;
+$sidebar-min-width:60px;
 $breakpoint-sidebar:1000px;

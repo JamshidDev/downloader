@@ -19,7 +19,8 @@ function auth(){
 
     </div>
     <div class="backdrop-blur-[8px]
-  bg-gradient-to-t to-dark from-gray-800 border border-surface-800 rounded-2xl
+  bg-gradient-to-t to-dark from-gray-800 border
+   border-surface-800 rounded-2xl
   xl:mt-[100px] lg:mt-[100px] md:mt-[100px] mt-[20px]
   xl:w-[400px] lg:w-[400px] md:w-[400px]
   lg:mx-auto xl:mx-auto md:mx-auto mx-2
