@@ -27,6 +27,8 @@ export default {
             'white': 'var(--white-color)',
 
             'surface-ground': 'var(--surface-ground)',
+            'surface-section': 'var(--surface-section)',
+            'surface-line': 'var(--surface-line)',
 
             'surface-50': 'var(--surface-50)',
             'surface-100': 'var(--surface-100)',

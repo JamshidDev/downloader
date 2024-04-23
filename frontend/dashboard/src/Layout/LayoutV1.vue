@@ -1,6 +1,6 @@
 <script setup>
 import SidebarV1 from "@/Layout/components/SidebarV1.vue";
-import {ref, computed, reactive} from "vue";
+import {ref, computed} from "vue";
 import AppHeader from "@/Layout/components/AppHeader.vue";
 
 const openSidebar = ref(true);
@@ -19,6 +19,9 @@ const layoutClass = computed(()=>{
   </div>
   <div class="main-content">
     <app-header></app-header>
+    <div class="main-page-content">
+      <router-view />
+    </div>
   </div>
 </div>
 </template>

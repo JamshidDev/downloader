@@ -1,6 +1,7 @@
 
 import './assets/index.scss'
 import App from './App.vue'
+import apiService from "@/service/apiService.js";
 
 
 import naive from 'naive-ui'
@@ -16,4 +17,5 @@ import router from './router';
 
 app.use(naive);
 app.use(router);
+window.$ApiService = apiService;
 app.mount('#app')

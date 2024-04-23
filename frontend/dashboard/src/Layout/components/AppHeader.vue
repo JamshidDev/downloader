@@ -51,7 +51,7 @@ const handleSelect = ()=>{
 </script>
 
 <template>
-<div class="app-header-container flex justify-between w-full h-[50px] border-b border-surface-300 bg-white">
+<div class="app-header-container flex justify-between w-full h-[50px] border-b border-surface-line bg-surface-section">
     <div></div>
     <div class="flex items-center mr-6">
       <n-dropdown
