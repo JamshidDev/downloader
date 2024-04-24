@@ -39,7 +39,7 @@ const handleDelete =(data)=>{
 
 <template>
   <div class="grid grid-cols-1">
-    <n-spin :show="loading" :delay="1000">
+    <n-spin :show="loading" :delay="200">
       <n-table class="border-surface-line" :bordered="true" :single-line="false" size="small">
         <thead class="bg-surface-ground">
         <tr>
@@ -67,11 +67,23 @@ const handleDelete =(data)=>{
                     <n-icon><Edit16Filled /></n-icon>
                   </template>
                 </n-button>
-                <n-button v-if="actionButtons.includes('action-delete')" @click="handleDelete(body)" size="small" strong secondary circle type="error">
-                  <template #icon>
-                    <n-icon><Delete24Regular /></n-icon>
+
+                <n-popconfirm
+                    @positive-click="handleDelete(body)"
+                    :positive-text="'Ha'"
+                    :negative-text="`Yo'q`"
+                >
+                  <template #trigger>
+                    <n-button v-if="actionButtons.includes('action-delete')" size="small" strong secondary circle type="error">
+                      <template #icon>
+                        <n-icon><Delete24Regular /></n-icon>
+                      </template>
+                    </n-button>
                   </template>
-                </n-button>
+                  <span class="text-xs">Haqiqattan ham bu amalni bajarmoqchimisiz?</span>
+                </n-popconfirm>
+
+
               </div>
             </td>
           </template>

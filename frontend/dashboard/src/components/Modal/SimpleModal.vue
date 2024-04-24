@@ -4,17 +4,16 @@ const visible = ref(false);
 const bodyStyle = {
   width: "600px"
 }
-const controlModal = (data)=>{
-  visible.value = data;
-}
+
 const props = defineProps({
   title:{
     type:String,
     default:'Default title',
+  },
+  visible:{
+    type:Boolean,
+    default:false,
   }
-})
-defineExpose({
-  controlModal
 })
 </script>
 <template>
@@ -28,11 +27,11 @@ defineExpose({
       role="dialog"
       aria-modal="true"
   >
-    <div class="grid grid-cols-1">
-      <div class="px-4">
+    <div class="grid grid-cols-1 mt-4">
+      <div class="px-4 mb-4">
         <slot name="default"></slot>
       </div>
-      <div class="border-t border-surface-line px-4">
+      <div class="px-4 mt-6">
         <slot name="footer"></slot>
       </div>
     </div>

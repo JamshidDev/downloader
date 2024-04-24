@@ -1,75 +1,35 @@
 <script setup>
-import {ref } from "vue";
+import {onMounted, ref} from "vue";
+import {usePermissionStore} from "@/store/modules/permissionStore.js"
 import SimpleTable from "@/components/Table/SimpleTable.vue";
 import CardPage from "@/components/Card/CardPage.vue";
-import SimpleModal from "@/components/Modal/SimpleModal.vue";
+import ActionModal from "./components/ActionModal.vue";
+import TablePagination from "@/components/Pagination/TablePagination.vue";
 
-const headerList = [
-  {
-    label: "#",
-    width: `40px`,
-  },
-  {
-    label: "Nomi",
-    width: `300px`,
-  },
-  {
-    label: "Menu",
-    width: `300px`,
-  },
-  {
-    label: "Route",
-    width: `600px`,
-  },
-  {
-    label: "Menu",
-
-  },
-  {
-    label: "Amallar 3",
-    width: `120px`,
-  },
-  {
-    label: "Amallar",
-    width: `80px`,
-  },
-];
-const bodyList = [
-  {
-    name: "Nomi",
-    menu: `menu`,
-    route: `route`,
-    menu_2: `route2`,
-    menu_3: `route3`,
-  },
-  {
-    name: "Nomi",
-    menu: `menu`,
-    route: `route`,
-    menu_2: `route`,
-    menu_3: `route3`,
-  },
-];
-const bodyProperty=['number','name', 'menu', 'route','menu_2','menu_2', 'action'];
-const loading = ref(false);
 const modalRef = ref(null);
-const handleEdit = (event)=>{
-  console.log(modalRef.value.controlModal(true))
-
+const permissionStore = usePermissionStore();
+const params = ref({
+  search:null,
+})
+const handleFilter = ()=>{
+  console.log(params.value.search)
+    permissionStore.filter_permission(params.value.search)
 }
-
+onMounted(()=>{
+  permissionStore.get_permission();
+})
 </script>
 
 <template>
-  <div class="grid grid-cols-1 px-4 pt-10">
-    <CardPage>
+  <div class="grid grid-cols-1 px-4 pt-6">
+    <CardPage :loading="permissionStore.loading">
       <template #header>
         <div class="flex justify-between items-center">
           <div>
             <h3 class="text-xl">Huquqlar</h3>
           </div>
           <div>
-            <n-button type="info">
+            <n-button @click="modalRef.addItem($event)" type="info">
               Qo'shish
             </n-button>
           </div>
@@ -78,21 +38,29 @@ const handleEdit = (event)=>{
       <template #default>
           <div class="flex justify-between mb-4">
               <div>
-                <n-input :loading="loading" size="small" placeholder="Qidiruv..." />
+                <n-input :loading="permissionStore.loading" v-model:value="params.search"   @keyup.enter="handleFilter" size="small" placeholder="Qidiruv..." />
               </div>
              <div>
              </div>
           </div>
           <simple-table
-              :loading="loading"
               :actionButtons="['action-edit', 'action-delete']"
-              :header-list="headerList"
-              :body-list="bodyList"
-              :body-property="bodyProperty"
-              @edit-event="handleEdit($event)"
+              :header-list="permissionStore.headerList"
+              :body-list="permissionStore.bodyList"
+              :body-property="permissionStore.bodyProperty"
+              @edit-event="modalRef.editItem($event)"
+              @delete-event="permissionStore.delete_permission($event._id)"
           ></simple-table>
       </template>
+      <template #footer>
+        <table-pagination
+            :page="permissionStore.params.page"
+            :per_page="permissionStore.params.per_page"
+            :total="permissionStore.totalItem"
+            @change-page="permissionStore.changePage($event)"
+        ></table-pagination>
+      </template>
     </CardPage>
-    <simple-modal ref="modalRef"></simple-modal>
+    <action-modal ref="modalRef"></action-modal>
   </div>
 </template>
