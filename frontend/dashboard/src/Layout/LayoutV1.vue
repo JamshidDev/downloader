@@ -10,6 +10,10 @@ const layoutClass = computed(()=>{
     close_sidebar:!openSidebar.value,
   }
 })
+
+const controlSidebar=()=>{
+
+}
 </script>
 
 <template>
@@ -18,7 +22,7 @@ const layoutClass = computed(()=>{
     <SidebarV1></SidebarV1>
   </div>
   <div class="main-content">
-    <app-header></app-header>
+    <app-header @sidebarEvent="openSidebar=!openSidebar"></app-header>
     <div class="main-page-content">
       <router-view />
     </div>

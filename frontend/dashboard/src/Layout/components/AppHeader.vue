@@ -1,7 +1,7 @@
 <script setup>
 import { h, defineComponent } from "vue";
 import { NIcon, useMessage } from "naive-ui";
-import { SignOut20Regular, ChatMail20Regular,Person24Regular,PersonCall20Regular } from '@vicons/fluent';
+import { SignOut20Regular, ChatMail20Regular,Person24Regular,PersonCall20Regular,Navigation20Filled } from '@vicons/fluent';
 const options = [
   {
     label: 'Xabarlar',
@@ -48,11 +48,23 @@ const options = [
 const handleSelect = ()=>{
 
 }
+const handleSidebar=()=>{
+  console.log('asa')
+  emits('sidebarEvent')
+}
+
+const emits =defineEmits(['sidebarEvent'])
 </script>
 
 <template>
 <div class="app-header-container flex justify-between w-full h-[50px] border-b border-surface-line bg-surface-section">
-    <div></div>
+    <div class="flex items-center ml-4">
+      <div class="border border-surface-line flex justify-center items-center w-[36px] h-[36px] rounded">
+        <n-icon @click="handleSidebar()" class="text-2xl cursor-pointer">
+          <Navigation20Filled />
+        </n-icon>
+      </div>
+    </div>
     <div class="flex items-center mr-6">
       <n-dropdown
           :options="options"

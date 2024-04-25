@@ -21,7 +21,7 @@ onMounted(()=>{
 </script>
 
 <template>
-  <div class="grid grid-cols-1 px-4 pt-6">
+  <div class="grid grid-cols-1 px-4 pt-6 pb-10">
     <CardPage :loading="permissionStore.loading">
       <template #header>
         <div class="flex justify-between items-center">

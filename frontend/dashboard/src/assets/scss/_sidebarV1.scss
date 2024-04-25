@@ -19,6 +19,7 @@
       background-color: var(--sidebar-color);
       transition: left 0.2s ease;
       width: 180px;
+      pointer-events: none;
     }
   }
   .open_sidebar{

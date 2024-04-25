@@ -23,7 +23,7 @@ const sidebarList = [
     subItems:[
       {
         order:1,
-        label:'Permission',
+        label:'permission',
         icon:'time-close',
         route:'/admin-permission',
         status:false,
@@ -31,7 +31,7 @@ const sidebarList = [
       },
       {
         order:2,
-        label:'Role',
+        label:'role',
         icon:'time-close',
         route:'/admin-role',
         status:false,
@@ -82,7 +82,7 @@ const sidebarList = [
     subItems:[
       {
         order:1,
-        label:'Permission',
+        label:'permission',
         icon:'time-close',
         route:'/dashboard',
         status:false,
@@ -90,7 +90,7 @@ const sidebarList = [
       },
       {
         order:2,
-        label:'Role',
+        label:'role',
         icon:'time-close',
         route:'/dashboard',
         status:false,
