@@ -5,6 +5,7 @@ import Login from "@/pages/login/Login.vue";
 import LayoutV1 from "@/Layout/LayoutV1.vue";
 import notFoundPage from "@/pages/notFoundPage/404page.vue"
 import PermissionPage from "@/pages/default/permission/PermissionPage.vue";
+import MenuRoutePage from "@/pages/default/menuRoute/MenuRoutePage.vue";
 
 const routes = [
     {   path: '/layout',
@@ -12,10 +13,16 @@ const routes = [
         component: LayoutV1,
         children:[
             {
-                path: "/permissions",
+                path: "/permission",
                 name: "permissions",
                 component: PermissionPage,
-            }
+            },
+            {
+                path: "/menu-route",
+                name: "menu-route",
+                component: MenuRoutePage,
+            },
+
         ],
     },
 

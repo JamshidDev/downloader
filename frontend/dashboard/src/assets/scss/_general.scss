@@ -1,0 +1,22 @@
+
+.n-modal{
+
+  .n-card-header{
+    @apply bg-gradient-to-r from-blue-500 to-blue-800
+
+  }
+  .n-card-header__main{
+    @apply text-white text-lg #{!important}
+  }
+  .n-base-close{
+    @apply bg-primary text-white p-3 shadow-2xl scale-100 hover:scale-125 transition-all
+  }
+  @apply overflow-hidden
+}
+
+.n-table{
+  @apply overflow-y-auto max-w-full
+}
+.table-box{
+  @apply max-w-full overflow-y-auto
+}

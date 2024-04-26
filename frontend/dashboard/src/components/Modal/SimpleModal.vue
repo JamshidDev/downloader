@@ -31,7 +31,7 @@ const props = defineProps({
       <div class="px-4 mb-4">
         <slot name="default"></slot>
       </div>
-      <div class="px-4 mt-6">
+      <div class="px-4 mt-2">
         <slot name="footer"></slot>
       </div>
     </div>

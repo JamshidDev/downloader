@@ -59,8 +59,8 @@ const emits =defineEmits(['sidebarEvent'])
 <template>
 <div class="app-header-container flex justify-between w-full h-[50px] border-b border-surface-line bg-surface-section">
     <div class="flex items-center ml-4">
-      <div class="border border-surface-line flex justify-center items-center w-[36px] h-[36px] rounded">
-        <n-icon @click="handleSidebar()" class="text-2xl cursor-pointer">
+      <div class="border border-surface-line flex justify-center items-center w-[32px] h-[32px] rounded">
+        <n-icon @click="handleSidebar()" class="text-xl cursor-pointer">
           <Navigation20Filled />
         </n-icon>
       </div>

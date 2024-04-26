@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-export const  usePermissionStore = defineStore('permissionStore',{
+export const  useMenuRouteStore = defineStore('menuRouteStore',{
     state:()=>({
         headerList:[
             {
@@ -10,6 +10,21 @@ export const  usePermissionStore = defineStore('permissionStore',{
             {
                 label: "Nomi",
                 field:'name',
+            },
+            {
+                label: "Route",
+                width: `120px`,
+                field:'route',
+            },
+            {
+                label: "Status",
+                width: `120px`,
+                field:'status',
+            },
+            {
+                label: "Status Text",
+                width: `120px`,
+                field:'statusText',
             },
             {
                 label: "ID",
@@ -35,9 +50,9 @@ export const  usePermissionStore = defineStore('permissionStore',{
 
     actions:{
 
-        get_permission(){
+        _index(){
             this.loading = true;
-            $ApiService.permissionService._index(this.params).then((res)=>{
+            $ApiService.menuRouteService._index(this.params).then((res)=>{
                 let number = (this.params.page - 1) * this.params.per_page;
                 res.data.data.data.forEach((item) => {
                     number++;
@@ -49,34 +64,34 @@ export const  usePermissionStore = defineStore('permissionStore',{
                 this.loading = false;
             })
         },
-        create_permission(data){
-            $ApiService.permissionService._store({data}).then((res)=>{
-                this.get_permission();
+        _store(data){
+            $ApiService.menuRouteService._store({data}).then((res)=>{
+                this._index();
             }).finally(()=>{
             })
         },
-        update_permission(payload){
+        _update(payload){
             let {data, permission_id} = payload;
-            $ApiService.permissionService._update({data, permission_id}).then((res)=>{
-                this.get_permission();
+            $ApiService.menuRouteService._update({data, permission_id}).then((res)=>{
+                this._index();
             }).finally(()=>{
             })
         },
-        delete_permission(id){
-            $ApiService.permissionService._delete({permission_id:id}).then((res)=>{
-                this.get_permission();
+        _delete(id){
+            $ApiService.menuRouteService._delete({permission_id:id}).then((res)=>{
+                this._index();
             }).finally(()=>{
             })
         },
-        filter_permission(payload){
+        _filter(payload){
             this.params.page = 1;
             this.params.search = payload;
-            this.get_permission();
+            this._index();
         },
-        changePage(event){
+        _changePage(event){
             this.params.page = event.page;
             this.params.per_page = event.per_page;
-            this.get_permission();
+            this._index();
         }
     }
 })

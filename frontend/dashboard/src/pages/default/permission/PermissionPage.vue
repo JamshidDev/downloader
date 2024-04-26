@@ -47,7 +47,6 @@ onMounted(()=>{
               :actionButtons="['action-edit', 'action-delete']"
               :header-list="permissionStore.headerList"
               :body-list="permissionStore.bodyList"
-              :body-property="permissionStore.bodyProperty"
               @edit-event="modalRef.editItem($event)"
               @delete-event="permissionStore.delete_permission($event._id)"
           ></simple-table>

@@ -13,10 +13,6 @@ const props = defineProps({
     type:Array,
     default:[],
   },
-  bodyProperty:{
-    type:Array,
-    default:[],
-  },
   actionButtons:{
     type:Array,
     default:[],
@@ -39,7 +35,7 @@ const handleDelete =(data)=>{
 
 <template>
   <div class="grid grid-cols-1">
-    <n-spin :show="loading" :delay="200">
+    <n-spin class="table-box" :show="loading" :delay="200">
       <n-table class="border-surface-line" :bordered="true" :single-line="false" size="small">
         <thead class="bg-surface-ground">
         <tr>
@@ -53,8 +49,8 @@ const handleDelete =(data)=>{
         </thead>
         <tbody>
         <tr v-for="body of bodyList" :key="body">
-          <template v-for="item of bodyProperty" :key="item">
-            <td v-if="item !== 'action'">{{body[item]}}</td>
+          <template v-for="item of headerList" :key="item">
+            <td v-if="item.field !== 'action'">{{body[item.field]}}</td>
             <td v-else>
               <div class="flex justify-center gap-2">
                 <n-button v-if="actionButtons.includes('action-view')" @click="handleView(body)" size="small" strong secondary circle type="warning">

@@ -5,11 +5,11 @@
 @import "scss/login";
 @import "scss/layoutV1";
 @import "scss/sidebarV1";
+@import "scss/general";
 
 @import "scss/overwrite";
 
 *{
-  font-family: var(--public-sans) !important;
-  font-style: normal;
-  font-weight: 500;
+  font-family: var(--poppins),  sans-serif !important;
+  font-style: oblique;
 }
