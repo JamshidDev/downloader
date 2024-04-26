@@ -1,41 +1,71 @@
-
 import MenuModel from "../models/menuModel.js";
+
 const index = async(req,res)=>{
     try{
         let page = req.query.page || 1;
         let per_page = req.query?.per_page || 10;
-        let sort = req.query?.sort || 1;
+        let sort =parseInt(req.query?.sort || 1);
         let search = req.query?.search || "";
         let totalItem = 0;
         let roleId = req.params.role_id;
+        let allMenu = await MenuModel.find({active:true,roleId})
+            .populate('routeId', '-_id -__v -created_at -updated_at')
+            .populate('roleId', 'name _id');
 
-        let allMenu = await MenuModel({
-            active:true,
-            roleId
-        });
+        let parentRoutes = allMenu.filter((item)=>item.parentId === null);
+        let subRoutes = allMenu.filter((item)=>item.parentId !== null);
 
-        console.log(allMenu)
+        parentRoutes.sort((a, b) => a.order - b.order);
+        subRoutes.sort((a, b) => a.order - b.order);
 
-        totalItem = await MenuModel.countDocuments({active:true, name: { $regex: search, $options: "i" },})
-        let result = await MenuModel.find({active:true, name: { $regex: search, $options: "i" },})
-            .populate("routeId")
-            .populate("roleId")
-            .sort({ created_at: sort })
-            .skip((page - 1) * per_page)
-            .limit(per_page);
+        let menuList = [];
+        for(let item of parentRoutes){
+            if(!item.subMenu){
+                let children = subRoutes.filter((subItem) => subItem.parentId == item._id)
+                    .map((a)=>({
+                        _id:a._id,
+                        name:a.name,
+                        parentId:a.parentId,
+                        route:a.routeId?.route,
+                        icon:a.routeId?.icon,
+                        status:a.routeId?.status,
+                        statusText:a.routeId?.statusText,
+                        order:a.order,
+                    }))
+
+                let field = {
+                    name:item.name,
+                    status:item.routeId.status,
+                    statusText:item.routeId.statusText,
+                    icon:item.routeId.icon,
+                    order:item.order,
+                    children:children,
+                }
+                menuList.push(field)
+            }else{
+                let field = {
+                    name:item.name,
+                    status:item.routeId.status,
+                    route:item.routeId.route,
+                    statusText:item.routeId.statusText,
+                    icon:item.routeId.icon,
+                    order:item.order,
+                    children:[],
+                }
+                menuList.push(field)
+            }
+
+        }
 
         res.status(200).json({
             success:true,
-            data:{
-                totalItem,
-                data:result
-            }
+            menus:menuList
         })
     }catch (error){
         console.log(error)
         res.status(500).json({
             success:false,
-            message: error,
+            message: error.message,
         })
     }
 }

@@ -16,8 +16,7 @@ const stringType = {
 
 const menuSchema = mongoose.Schema({
     name:stringType,
-    parentId:numberType,
-    childId:numberType,
+    parentId:stringType,
     routeId:{
         type:Schema.Types.ObjectId,
         ref:"menuRouteModel",

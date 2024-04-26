@@ -1,6 +1,43 @@
 import RoleModel from "../models/roleModel.js";
+import PermissionModel from "../models/permissionModel.js";
 
 const index = async(req,res)=>{
+    try{
+        let page = req.query.page || 1;
+        let per_page = req.query?.per_page || 10;
+        let sort =parseInt(req.query?.sort || 1);
+        let search = req.query?.search || "";
+        let totalItem = 0;
+
+        totalItem = await RoleModel.countDocuments({active:true, name: { $regex: search, $options: "i" },})
+        let result = await RoleModel.find({active:true, name: { $regex: search, $options: "i" },})
+            .populate("permissions_list")
+            .sort({ created_at:sort })
+            .skip((page - 1) * per_page)
+            .limit(per_page);
+
+        let permissionList = await PermissionModel.find({
+            active:true
+        }).select('_id name')
+
+        res.status(200).json({
+            success:true,
+            roles:{
+                totalItem,
+                data:result
+            },
+            permissions:permissionList
+        })
+    }catch (error){
+        console.log(error)
+        res.status(500).json({
+            success:false,
+            message: error,
+        })
+    }
+}
+
+const _create = async(req,res)=>{
     try{
         let page = req.query.page || 1;
         let per_page = req.query?.per_page || 10;
@@ -9,7 +46,7 @@ const index = async(req,res)=>{
         let totalItem = 0;
 
         totalItem = await RoleModel.countDocuments({active:true, name: { $regex: search, $options: "i" },})
-        let result = await RoleModel.find({active:true, name: { $regex: search, $options: "i" },})
+        let result = await PermissionModel.find({active:true, name: { $regex: search, $options: "i" },})
             .populate("permissions_list")
             .sort({ created_at: sort })
             .skip((page - 1) * per_page)

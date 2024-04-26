@@ -4,7 +4,7 @@ const index = async(req,res)=>{
     try{
         let page = req.query.page || 1;
         let per_page = req.query?.per_page || 10;
-        let sort = req.query?.sort || 1;
+        let sort =parseInt(req.query?.sort || 1);
         let search = req.query?.search || "";
         let totalItem = 0;
 

@@ -4,13 +4,13 @@ const index = async(req,res)=>{
     try{
         let page = req.query.page || 1;
         let per_page = req.query?.per_page || 10;
-        let sort = req.query?.sort || 1;
+        let sort =parseInt(req.query?.sort || 1);
         let search = req.query?.search || "";
         let totalItem = 0;
 
         totalItem = await MenuRouteModel.countDocuments({active:true, name: { $regex: search, $options: "i" },})
         let result = await MenuRouteModel.find({active:true, name: { $regex: search, $options: "i" },})
-            .sort({ created_at: sort })
+            .sort({created_at:sort})
             .skip((page - 1) * per_page)
             .limit(per_page);
 
