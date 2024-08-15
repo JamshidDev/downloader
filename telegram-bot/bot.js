@@ -8,7 +8,7 @@ import clientModule from "./modules/clientModule.js"
 import configModule from "./modules/configModule.js"
 import channelModule from "./modules/channelModule.js"
 import overwriteCommandsModule from "./modules/overwriteCommandsModule.js";
-
+import movieModule from "./modules/movieModule.js";
 
 
 
@@ -33,6 +33,7 @@ bot.use(overwriteCommandsModule);
 bot.use(channelModule);
 bot.filter(async (ctx)=> !ctx.config.superAdmin).use(clientModule);
 bot.filter(async (ctx)=> ctx.config.superAdmin).use(adminModule);
+bot.use(movieModule);
 
 
 

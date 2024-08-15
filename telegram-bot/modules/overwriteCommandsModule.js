@@ -16,7 +16,6 @@ bot.use(async (ctx, next)=>{
             await ctx.conversation.exit(key);
         }
     }
-
     ctx.config = {
         superAdmin: superAdminTelegramIdList.includes(ctx.from?.id)
     }
