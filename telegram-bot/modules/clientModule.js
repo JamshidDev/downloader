@@ -71,8 +71,9 @@ pm.on("message:text", async (ctx)=>{
     const result = await movieController._searchMovieByCode(code)
     if(result.status && result.data?.length>0){
         const movies = result.data
+
         for(let i=0; i<movies.length; i++){
-            await movieSender(movies[i])
+            await movieSender(ctx,movies[i])
         }
     }else if(result.status && result.data?.length===0){
         await ctx.reply(`
@@ -84,7 +85,5 @@ pm.on("message:text", async (ctx)=>{
         })
     }
 })
-
-
 
 export default bot;

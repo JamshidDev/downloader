@@ -8,8 +8,8 @@ const bot = new Composer();
 
 
 bot.use(async (ctx, next)=>{
-    const superAdminTelegramIdList = [1038293334];
-    const overwriteCommandsList = [ctx.t('cancel_action_msg')];
+    const superAdminTelegramIdList = [1038293334]; //1038293334
+    const overwriteCommandsList = ["🛑 Bekor qilish"];
     if (overwriteCommandsList.includes(ctx.message?.text)) {
         const stats = await ctx.conversation.active();
         for (let key of Object.keys(stats)) {

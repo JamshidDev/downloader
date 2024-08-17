@@ -4,7 +4,7 @@ import mongoose from "mongoose"
 const channelSchema = mongoose.Schema({
     telegramId: {
         type: Number,
-        required: true,
+        default:null,
     },
     userId: {
         type: Number,
@@ -15,12 +15,18 @@ const channelSchema = mongoose.Schema({
     },
     username: {
         type: String,
+        default:null,
     },
     type: {
         type: String,
     },
+    channelLink:{
+        type: String,
+        default:null,
+    },
     newChat:{
         type: Object,
+        default:null,
     },
     ad: {
         type: Boolean,

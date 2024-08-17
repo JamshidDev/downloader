@@ -30,6 +30,8 @@ bot.use(session({
                     phone: null,
                     full_name: null,
                 },
+                channels:[],
+                adminChannels:[],
             }
         },
         storage: adapter,

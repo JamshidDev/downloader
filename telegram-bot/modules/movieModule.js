@@ -62,6 +62,21 @@ async function uploadMovieConversation(conversation, ctx){
             reply_markup:keyboardBtn,
             parse_mode:"HTML"
         })
+        const admin_buttons = new Keyboard()
+            .text("⬇️ Kino yuklash")
+            .text("✍️ Xabar yozish")
+            .row()
+            .text("✍️ Xabar yozish")
+            .text("🔗 Link qo'shish")
+            .row()
+            .text("📈 Umumiy statistika")
+            .text("📊 Kunlik statistika")
+            .resized()
+
+        await ctx.reply(`⚡️ Asosy menyu ⚡️`,{
+            reply_markup:admin_buttons
+        })
+
     }else{
         await ctx.reply(`🤯 Kutilmagan xatolik yuz berdi`, {
             reply_markup:keyboardBtn,
@@ -71,16 +86,8 @@ async function uploadMovieConversation(conversation, ctx){
 }
 
 
-pm.command("add_movie", async (ctx)=>{
+bot.hears("⬇️ Kino yuklash", async (ctx)=>{
     await ctx.conversation.enter("uploadMovieConversation");
-})
-
-
-pm.on("msg:video", async(ctx)=>{
-    let fileId = ctx.message.video.file_id
-    let caption = ctx.message.caption
-    console.log(ctx.message)
-    await ctx.api.sendVideo(ctx.from.id, fileId)
 })
 
 

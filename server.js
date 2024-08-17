@@ -1,7 +1,7 @@
 import { webhookCallback } from "grammy"
 import express from "express"
 import cors from 'cors';
-// import {bot,token} from "./telegram-bot/bot.js"
+import {bot,token} from "./telegram-bot/bot.js"
 import "./config/mongodb.js";
 
 import permissionRouter from "./router/permissionRouter.js";
@@ -16,6 +16,7 @@ import organizationRouter from "./router/organizationRouter.js";
 const app = express()
 app.use(express.json())
 app.use(cors());
+
 
 
 app.use("/permission",permissionRouter);
@@ -42,9 +43,14 @@ app.use("/organization",organizationRouter);
 
 
 
+app.use((req, res, next) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    next();
+});
 
-
-// app.use(`/${token}`, webhookCallback(bot, 'express'))
+app.use(`/${token}`, webhookCallback(bot, 'express'))
 
 
 app.use((req, res) => {

@@ -1,56 +1,77 @@
 import { Composer } from "grammy"
 import channelControllers from "../controllers/channelControllers.js";
 import userControllers from "../controllers/userControllers.js";
+import {Menu} from "@grammyjs/menu";
 
 const bot = new Composer();
 
 
+const subscribeButton = new Menu("subscribeButton")
+    .dynamic(async (ctx,range)=>{
+        let list = await ctx.session.session_db.channels
+        list.forEach((item)=>{
+            range
+                .url("➕ Obuna bo'lish", item.type ==='channel'? `https://t.me/${item.link}` : item.link)
+                .row()
+        })
+    }).text("✅ Tekshirish")
 
-bot.on("my_chat_member", async (ctx) => {
-    const status = ctx.update.my_chat_member.new_chat_member.status;
-    const type = ctx.update.my_chat_member.chat.type;
-    if(type === 'channel'){
-        if(status === 'administrator'){
-            let data = {
-                telegramId: ctx.update.my_chat_member.chat.id,
-                userId: ctx.update.my_chat_member.from.id,
-                title: ctx.update.my_chat_member.chat.title,
-                username: ctx.update.my_chat_member.chat.username,
-                type: ctx.update.my_chat_member.chat.type,
-                newChat: ctx.update.my_chat_member.new_chat_member,
-            }
-            await channelControllers.store(data)
-        }else{
-            // status is left or member
-            let telegram_id = ctx.update.my_chat_member.chat.id;
-            await channelControllers.remove(telegram_id)
-        }
-    }else if(type === 'private'){
-        if(status ==='kicked'){
-            const stats = await ctx.conversation.active();
-            for (let key of Object.keys(stats)) {
-                await ctx.conversation.exit(key);
-            }
-           await userControllers.remove(ctx.from.id)
-        }else{
-        //     status is member
-            let data = {
-                telegramId:ctx.from.id,
-                firstname:ctx.from.first_name,
-                lastname:ctx.from?.last_name,
-                username:ctx.from?.username,
-                languageCode:ctx.from.language_code,
-            }
-            await userControllers.store(data)
-        }
+
+
+
+
+bot.use(subscribeButton)
+
+
+
+bot.use(async (ctx, next)=>{
+    let subscribeStatus = false
+    ctx.session.session_db.channels = []
+    let result = await channelControllers.index(true, true)
+
+
+    if(result.data.length===0){
+        await next()
+        return
     }
-});
 
-// bot.use(async (ctx, next)=>{
-//     const chatMembers = await ctx.chatMembers.getChatMember(-1001704079922, ctx.from.id);
-//     console.log(chatMembers.status)
-//     next()
-// })
+
+    if(result.success && result.data.length > 0){
+        const channels = result.data
+        for(const channel of channels){
+            if(channel.channelLink === null){
+                const chatMembers = await ctx.chatMembers.getChatMember(channel.telegramId, ctx.from.id)
+                if(chatMembers.status === 'left'){
+                    subscribeStatus = true
+                    ctx.session.session_db.channels.push({
+                        link:channel.username,
+                        type:'channel'
+                    })
+                }
+            }else{
+                ctx.session.session_db.channels.push({
+                    link:channel.channelLink,
+                    type:'link'
+                })
+            }
+        }
+
+        if(subscribeStatus){
+            await ctx.reply(`
+<i>🙅‍♂️ Kechirasiz <a href="tg://user?id=${ctx.from.id}">${ctx.from.first_name}</a> botimizdan foydalanish uchun ushbu kanallarga a'zo bo'lishingiz shart!</i>
+        `, {
+                reply_markup:subscribeButton,
+                parse_mode:"HTML"
+            })
+
+        }else{
+          await  next()
+        }
+
+    }
+})
+
+
 
 
 

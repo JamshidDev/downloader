@@ -7,8 +7,10 @@ import adminModule from "./modules/adminModule.js"
 import clientModule from "./modules/clientModule.js"
 import configModule from "./modules/configModule.js"
 import channelModule from "./modules/channelModule.js"
+import userModule from "./modules/userModule.js";
 import overwriteCommandsModule from "./modules/overwriteCommandsModule.js";
 import movieModule from "./modules/movieModule.js";
+import messageSenderModule from "./modules/messageSenderModule.js";
 
 
 
@@ -30,9 +32,18 @@ const allow_updates = ["my_chat_member", "chat_member", "message", "callback_que
 
 bot.use(configModule);
 bot.use(overwriteCommandsModule);
-bot.use(channelModule);
-bot.filter(async (ctx)=> !ctx.config.superAdmin).use(clientModule);
+bot.use(userModule);
+
+
+
+// Admin module
 bot.filter(async (ctx)=> ctx.config.superAdmin).use(adminModule);
+bot.filter(async (ctx)=> ctx.config.superAdmin).use(messageSenderModule);
+
+// client module
+bot.filter(async (ctx)=> !ctx.config.superAdmin).use(channelModule);
+bot.filter(async (ctx)=> !ctx.config.superAdmin).use(clientModule);
+
 bot.use(movieModule);
 
 

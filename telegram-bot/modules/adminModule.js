@@ -1,5 +1,6 @@
 import { Composer,Keyboard } from "grammy"
 import {createConversation} from "@grammyjs/conversations"
+import channelControllers from "../controllers/channelControllers.js";
 const bot = new Composer();
 
 const pm = bot.chatType("private");
@@ -12,8 +13,11 @@ pm.use(createConversation(base_menu))
 
 async function base_menu(conversation, ctx){
     const admin_buttons = new Keyboard()
-        .text("🔗 Admin kanallar")
+        .text("⬇️ Kino yuklash")
+        .text("⭐ Admin kanallar")
+        .row()
         .text("✍️ Xabar yozish")
+        .text("🔗 Link qo'shish")
         .row()
         .text("📈 Umumiy statistika")
         .text("📊 Kunlik statistika")
@@ -27,9 +31,26 @@ async function base_menu(conversation, ctx){
 
 
 pm.command("start", async (ctx)=>{
-    await ctx.reply("👋 Salom Admin");
+    // await ctx.reply("👋 Salom Admin");
     await ctx.conversation.enter("base_menu");
 
+})
+
+pm.command("add_link", async (ctx)=>{
+
+    let data = {
+        telegramId:null,
+        userId:ctx.from.id,
+        title:"Link",
+        type:'link',
+        channelLink:'https://timeweb.cloud'
+    }
+    const result = await channelControllers.store(data)
+    console.log(result)
+})
+
+bot.hears("🛑 Bekor qilish", async (ctx)=>{
+    await ctx.conversation.enter("base_menu");
 })
 
 
