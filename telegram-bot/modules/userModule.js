@@ -15,14 +15,14 @@ bot.command('start', async (ctx)=>{
         languageCode:ctx.from.language_code,
         active:true,
     }
-    const result = await userControllers.store(data)
-    if(!ctx.config.superAdmin){
+     await userControllers.store(data)
+    if(!ctx.config?.superAdmin){
         await ctx.reply(`
-<b>👋 Salom <a href="tg://user?id=${ctx.from.id}">${ctx.from.first_name}</a></b> 
+👋 Salom [${ctx.from.first_name}](tg://user?id=${ctx.from.id})
 
-<i>Menga kino kodini yuboring!</i>
+_Menga kino kodini yuboring!_
     `,{
-            parse_mode:"HTML",
+            parse_mode:"Markdown",
             reply_markup:{
                 remove_keyboard:true,
             }
@@ -51,7 +51,6 @@ bot.command('start', async (ctx)=>{
 
 
 bot.on("my_chat_member", async (ctx) => {
-    console.log(ctx)
     const status = ctx.update.my_chat_member.new_chat_member.status;
     const type = ctx.update.my_chat_member.chat.type;
     if(type === 'channel'){

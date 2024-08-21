@@ -41,12 +41,12 @@ bot.use(userModule);
 bot.filter(async (ctx)=> ctx.config.superAdmin).use(adminModule);
 bot.filter(async (ctx)=> ctx.config.superAdmin).use(messageSenderModule);
 bot.filter(async (ctx)=> ctx.config.superAdmin).use(dashboardModule);
+bot.filter(async (ctx)=> ctx.config.superAdmin).use(movieModule);
 
 // client module
 bot.filter(async (ctx)=> !ctx.config.superAdmin).use(channelModule);
 bot.filter(async (ctx)=> !ctx.config.superAdmin).use(clientModule);
 
-bot.use(movieModule);
 
 
 

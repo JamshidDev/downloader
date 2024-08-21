@@ -21,7 +21,7 @@ const admin_buttons = new Keyboard()
 
 
 bot.use(createConversation(addLinkConversation))
-bot.use(createConversation(adminChannelConversation))
+bot.use(createConversation(adminChannelConversation23))
 
 
 const adminChannel = new Menu("adminChannel")
@@ -113,7 +113,7 @@ Masalan: <i>https://timeweb.cloud.com</i>
 
 
 
-async function adminChannelConversation(conversation, ctx){
+async function adminChannelConversation23(conversation, ctx){
     ctx.session.session_db.adminChannels = []
     let keyboardBtn = new Keyboard()
         .text("🛑 Bekor qilish")
@@ -157,7 +157,7 @@ bot.hears("🔗 Link qo'shish", async (ctx)=>{
     await ctx.conversation.enter("addLinkConversation");
 })
 bot.hears("⭐ Admin kanallar", async (ctx)=>{
-    await ctx.conversation.enter("adminChannelConversation");
+    // await ctx.conversation.enter("adminChannelConversation23");
 })
 
 
