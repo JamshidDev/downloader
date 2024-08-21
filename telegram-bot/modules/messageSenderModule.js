@@ -13,8 +13,7 @@ const admin_buttons = new Keyboard()
     .text("✍️ Xabar yozish")
     .text("🔗 Link qo'shish")
     .row()
-    .text("📈 Umumiy statistika")
-    .text("📊 Kunlik statistika")
+    .text("📈 Dashboard")
     .resized()
 
 

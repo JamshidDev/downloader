@@ -37,8 +37,7 @@ bot.command('start', async (ctx)=>{
             .text("✍️ Xabar yozish")
             .text("🔗 Link qo'shish")
             .row()
-            .text("📈 Umumiy statistika")
-            .text("📊 Kunlik statistika")
+            .text("📈 Dashboard")
             .resized()
 
         await ctx.reply(`⚡️ Asosy menyu ⚡️`,{

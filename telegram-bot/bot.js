@@ -11,6 +11,7 @@ import userModule from "./modules/userModule.js";
 import overwriteCommandsModule from "./modules/overwriteCommandsModule.js";
 import movieModule from "./modules/movieModule.js";
 import messageSenderModule from "./modules/messageSenderModule.js";
+import dashboardModule from "./modules/dashboardModule.js";
 
 
 
@@ -39,6 +40,7 @@ bot.use(userModule);
 // Admin module
 bot.filter(async (ctx)=> ctx.config.superAdmin).use(adminModule);
 bot.filter(async (ctx)=> ctx.config.superAdmin).use(messageSenderModule);
+bot.filter(async (ctx)=> ctx.config.superAdmin).use(dashboardModule);
 
 // client module
 bot.filter(async (ctx)=> !ctx.config.superAdmin).use(channelModule);
