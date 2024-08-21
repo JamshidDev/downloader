@@ -25,6 +25,7 @@ bot.use(subscribeButton)
 
 
 bot.use(async (ctx, next)=>{
+    console.log(ctx)
     let subscribeStatus = false
     ctx.session.session_db.channels = []
     let result = await channelControllers.index(true, true)
