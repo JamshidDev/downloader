@@ -69,7 +69,8 @@ bot.on("my_chat_member", async (ctx) => {
             let telegram_id = ctx.update.my_chat_member.chat.id;
             await channelControllers.remove(telegram_id)
         }
-    }else if(type === 'private'){
+    }
+    else if(type === 'private'){
         if(status ==='kicked'){
             const stats = await ctx.conversation.active();
             for (let key of Object.keys(stats)) {
