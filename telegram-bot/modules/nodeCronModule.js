@@ -1,5 +1,6 @@
 import {Composer, Keyboard, MemorySessionStorage, session} from "grammy"
 import {Worker} from "worker_threads"
+import mongoose from "mongoose"
 import userControllers from "../controllers/userControllers.js";
 import {createConversation} from "@grammyjs/conversations"
 
@@ -38,12 +39,29 @@ async function sendMessage(conversation, ctx){
             const messageId = [message_text.message.message_id]
             const useridList = result.data.map(v=>v.telegramId)
             const worker_one = new Worker("./telegram-bot/workers/worker_one.js")
+            let successMessagedCount = 0
             worker_one.postMessage({
                 users:useridList,
                 messageId:messageId,
+                fromId:ctx.from.id
             });
-            worker_one.on('message', (result)=>{
-                console.log(result)
+            worker_one.on('message', async (msg)=>{
+
+                if(!msg?.status && msg.userId){
+                    // user blocked error
+                    console.log(msg.userId)
+                }else if(msg?.status && !msg.isFinish){
+                    //success send message
+                    successMessagedCount ++
+                    console.log(msg)
+                }else if(msg?.status && msg.isFinish){
+                    //finish task
+                    await ctx.reply(`Xabar yuborish yakunlandi! ${successMessagedCount}`)
+
+                }else{
+                    //unexpected error
+                    console.log(msg)
+                }
             })
         }
     }
@@ -53,60 +71,9 @@ async function sendMessage(conversation, ctx){
 
 
 
-bot.command('job', async(ctx)=>{
-    console.log("/job-start")
-    const id = ctx.from.id
-    const fileName = "./telegram-bot/modules/Worker_one.js"
-    const result = await userControllers.allUser()
-    console.log(result.data)
 
-
-    // const worker_one = new Worker("./telegram-bot/workers/worker_one.js")
-    // // const worker_two = new Worker("./telegram-bot/workers/worker_two.js")
-    //
-    // worker_one.postMessage({
-    //     id:433453,
-    //     message:"dsfsdfsdf"
-    // });
-    // worker_one.on('message', (result)=>{
-    //     console.log(result)
-    // })
-    // worker_two.postMessage("Start two");
-    // worker_two.on('message', (result)=>{
-    //     console.log(result)
-    // })
-})
-
-bot.command('thread', async(ctx)=>{
-    console.log("/thread")
-    let useridList = []
-    const result = await userControllers.allUser()
-
-    if(result.status && result.data.length>0){
-        useridList = result.data.map(v=>v.telegramId)
-    }
-
-    const worker_one = new Worker("./telegram-bot/workers/worker_one.js")
-    worker_one.postMessage({
-        users:useridList,
-        message:"Test message!"
-    });
-    worker_one.on('message', (result)=>{
-        console.log(result)
-    })
-} )
-
-bot.command('send', async (ctx)=>{
-    await ctx.reply('ok')
+bot.hears("✍️ Xabar yozish", async (ctx)=>{
     await ctx.conversation.enter("sendMessage");
-})
-
-bot.on("message", async (ctx)=>{
-
-    console.log(ctx.message)
-    const text = 'ok'
-    ctx.api.sendMessage(ctx.from.id, text
-        )
 })
 
 

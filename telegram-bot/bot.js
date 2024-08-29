@@ -4,7 +4,6 @@ dotenv.config();
 
 
 import adminModule from "./modules/adminModule.js"
-import clientModule from "./modules/clientModule.js"
 import configModule from "./modules/configModule.js"
 import channelModule from "./modules/channelModule.js"
 import userModule from "./modules/userModule.js";
@@ -14,6 +13,7 @@ import messageSenderModule from "./modules/messageSenderModule.js";
 import dashboardModule from "./modules/dashboardModule.js";
 import subscriberModule from "./modules/subscriberModule.js";
 import nodeCronModule from "./modules/nodeCronModule.js";
+import clientModule from "./modules/clientModule.js";
 
 let _TOKEN = process.env.BOT_TOKEN;
 let _DOMAIN = process.env.DOMAIN_URL;
@@ -25,6 +25,7 @@ const bot = new Bot(_TOKEN);
 bot.use(configModule);
 bot.use(overwriteCommandsModule);
 bot.use(userModule);
+bot.use(clientModule);
 
 // Admin module
 bot.filter(async (ctx)=> ctx.config.superAdmin).use(adminModule);
@@ -33,10 +34,9 @@ bot.filter(async (ctx)=> ctx.config.superAdmin).use(dashboardModule);
 bot.filter(async (ctx)=> ctx.config.superAdmin).use(movieModule);
 
 // client module
-// bot.filter(async (ctx)=> !ctx.config.superAdmin).use(subscriberModule);
-// bot.filter(async (ctx)=> !ctx.config.superAdmin).use(channelModule);
-// bot.filter(async (ctx)=> !ctx.config.superAdmin).use(clientModule);
-bot.filter(async (ctx)=> !ctx.config.superAdmin).use(nodeCronModule);
+bot.filter(async (ctx)=> !ctx.config.superAdmin).use(subscriberModule);
+bot.filter(async (ctx)=> !ctx.config.superAdmin).use(channelModule);
+bot.filter(async (ctx)=>ctx.config.superAdmin).use(nodeCronModule);
 
 bot.api.setWebhook(_WEBHOOK_URL, {
     allowed_updates:allow_updates
@@ -48,7 +48,7 @@ bot.api.setWebhook(_WEBHOOK_URL, {
 
 bot.catch((err) => {
     const ctx = err.ctx;
-    console.error(`Error while handling update ${ctx.update.update_id}:`);
+    console.error(`Error while handling update`);
 });
 
 let token = _TOKEN;

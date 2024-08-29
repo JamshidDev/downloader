@@ -7,43 +7,50 @@ const bot = new Composer();
 
 
 bot.command('start', async (ctx)=>{
-    let data = {
-        telegramId:ctx.from.id,
-        firstname:ctx.from.first_name,
-        lastname:ctx.from?.last_name,
-        username:ctx.from?.username,
-        languageCode:ctx.from.language_code,
-        active:true,
-    }
-     await userControllers.store(data)
-    if(!ctx.config?.superAdmin){
-        await ctx.reply(`
+
+    try{
+        let data = {
+            telegramId:ctx.from.id,
+            firstname:ctx.from.first_name,
+            lastname:ctx.from?.last_name,
+            username:ctx.from?.username,
+            languageCode:ctx.from.language_code,
+            active:true,
+        }
+        await userControllers.store(data)
+        if(!ctx.config?.superAdmin){
+            await ctx.reply(`
 👋 Salom [${ctx.from.first_name}](tg://user?id=${ctx.from.id})
 
 _Menga kino kodini yuboring!_
     `,{
-            parse_mode:"Markdown",
-            reply_markup:{
-                remove_keyboard:true,
-            }
-        })
-    }
-    else{
+                parse_mode:"Markdown",
+                reply_markup:{
+                    remove_keyboard:true,
+                }
+            })
+        }
+        else{
 
-        const admin_buttons = new Keyboard()
-            .text("⬇️ Kino yuklash")
-            .text("⭐ Admin kanallar")
-            .row()
-            .text("✍️ Xabar yozish")
-            .text("🔗 Link qo'shish")
-            .row()
-            .text("📈 Dashboard")
-            .resized()
+            const admin_buttons = new Keyboard()
+                .text("⬇️ Kino yuklash")
+                .text("⭐ Admin kanallar")
+                .row()
+                .text("✍️ Xabar yozish")
+                .text("🔗 Link qo'shish")
+                .row()
+                .text("📈 Dashboard")
+                .resized()
 
-        await ctx.reply(`⚡️ Asosy menyu ⚡️`,{
-            reply_markup:admin_buttons
-        })
+            await ctx.reply(`⚡️ Asosy menyu ⚡️`,{
+                reply_markup:admin_buttons
+            })
+        }
+    }catch (error){
+        console.log("error")
     }
+
+
 
 })
 
