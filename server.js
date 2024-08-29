@@ -1,7 +1,7 @@
 import { webhookCallback } from "grammy"
 import express from "express"
 import cors from 'cors';
-// import {bot,token} from "./telegram-bot/bot.js"
+import {bot,token} from "./telegram-bot/bot.js"
 import "./config/mongodb.js";
 
 import permissionRouter from "./router/permissionRouter.js";
@@ -35,7 +35,7 @@ app.use("/organization",organizationRouter);
 
 
 
-// app.use(`/${token}`, webhookCallback(bot, 'express'))
+app.use(`/${token}`, webhookCallback(bot, 'express'))
 
 
 app.use((req, res) => {
