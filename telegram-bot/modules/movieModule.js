@@ -64,13 +64,12 @@ async function uploadMovieConversation(conversation, ctx){
         })
         const admin_buttons = new Keyboard()
             .text("⬇️ Kino yuklash")
-            .text("✍️ Xabar yozish")
+            .text("⭐ Admin kanallar")
             .row()
             .text("✍️ Xabar yozish")
             .text("🔗 Link qo'shish")
             .row()
-            .text("📈 Umumiy statistika")
-            .text("📊 Kunlik statistika")
+            .text("📈 Dashboard")
             .resized()
 
         await ctx.reply(`⚡️ Asosy menyu ⚡️`,{

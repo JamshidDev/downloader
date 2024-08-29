@@ -13,8 +13,7 @@ const admin_buttons = new Keyboard()
     .text("✍️ Xabar yozish")
     .text("🔗 Link qo'shish")
     .row()
-    .text("📈 Umumiy statistika")
-    .text("📊 Kunlik statistika")
+    .text("📈 Dashboard")
     .resized()
 
 
@@ -158,7 +157,7 @@ bot.hears("🔗 Link qo'shish", async (ctx)=>{
     await ctx.conversation.enter("addLinkConversation");
 })
 bot.hears("⭐ Admin kanallar", async (ctx)=>{
-    // await ctx.conversation.enter("adminChannelConversation");adminChannelConversation
+    await ctx.conversation.enter("adminChannelConversation");
 })
 
 

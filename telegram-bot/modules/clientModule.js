@@ -42,18 +42,25 @@ const pm = bot.chatType("private");
 //         })
 //     })
 // pm.use(language_menu)
-pm.command('start', async (ctx)=>{
-    await ctx.reply(`
-<b>👋 Salom <a href="tg://user?id=${ctx.from.id}">${ctx.from.first_name}</a></b> 
 
-<i>Menga kino kodini yuboring!</i>
-    `,{
-        parse_mode:"HTML",
-        reply_markup:{
-            remove_keyboard:true,
-        }
-    })
-})
+
+// pm.command('start', async (ctx)=>{
+//     try{
+//         await ctx.reply(`
+// <b>👋 Salom <a href="tg://user?id=${ctx.from.id}">${ctx.from.first_name}</a></b>
+//
+// <i>Menga kino kodini yuboring!</i>
+//     `,{
+//             parse_mode:"HTML",
+//             reply_markup:{
+//                 remove_keyboard:true,
+//             }
+//         })
+//     }catch (error){
+//         console.log("/start error")
+//     }
+//
+// })
 
 const movieSender = async (ctx, movie)=>{
     let fileId = movie.fileId
@@ -66,24 +73,29 @@ const movieSender = async (ctx, movie)=>{
     })
 }
 
-pm.on("message:text", async (ctx)=>{
-    const code = ctx.message.text
-    const result = await movieController._searchMovieByCode(code)
-    if(result.status && result.data?.length>0){
-        const movies = result.data
-
-        for(let i=0; i<movies.length; i++){
-            await movieSender(ctx,movies[i])
-        }
-    }else if(result.status && result.data?.length===0){
-        await ctx.reply(`
-<b>❌ Kino topilmadi</b>
-
-<i>Iltimos kino kodi tog'riligini tekshiring!</i>
-        `, {
-            parse_mode:"HTML",
-        })
-    }
-})
+// pm.on("message:text", async (ctx)=>{
+//     try{
+//         const code = ctx.message.text
+//         const result = await movieController._searchMovieByCode(code)
+//         if(result.status && result.data?.length>0){
+//             const movies = result.data
+//
+//             for(let i=0; i<movies.length; i++){
+//                 await movieSender(ctx,movies[i])
+//             }
+//         }else if(result.status && result.data?.length===0){
+//             await ctx.reply(`
+// <b>❌ Kino topilmadi</b>
+//
+// <i>Iltimos kino kodi tog'riligini tekshiring!</i>
+//         `, {
+//                 parse_mode:"HTML",
+//             })
+//         }
+//     }catch (error){
+//         console.log(error)
+//     }
+//
+// })
 
 export default bot;

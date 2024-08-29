@@ -44,4 +44,23 @@ const remove = async (telegramId) => {
     }
 }
 
-export default {store, remove}
+const allUser = async ()=>{
+    try {
+        let users = await UserModels.find({active:true}).exec();
+        return {
+            status:true,
+            data:users,
+            message: "Successfully removed",
+        }
+    } catch (error) {
+        console.log(error)
+        return {
+            status:false,
+            data:[],
+            message: error,
+        }
+
+    }
+}
+
+export default {store, remove, allUser}

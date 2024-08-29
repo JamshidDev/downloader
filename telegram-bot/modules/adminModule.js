@@ -19,8 +19,7 @@ async function base_menu(conversation, ctx){
         .text("✍️ Xabar yozish")
         .text("🔗 Link qo'shish")
         .row()
-        .text("📈 Umumiy statistika")
-        .text("📊 Kunlik statistika")
+        .text("📈 Dashboard")
         .resized()
 
     await ctx.reply(`⚡️ Asosy menyu ⚡️`,{
@@ -29,12 +28,6 @@ async function base_menu(conversation, ctx){
 }
 
 
-
-pm.command("start", async (ctx)=>{
-    // await ctx.reply("👋 Salom Admin");
-    await ctx.conversation.enter("base_menu");
-
-})
 
 pm.command("add_link", async (ctx)=>{
 

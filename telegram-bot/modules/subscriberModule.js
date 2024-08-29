@@ -1,8 +1,16 @@
-import { Composer } from "grammy"
-import channelControllers from "../controllers/channelControllers.js";
+import { Composer, MemorySessionStorage, session } from "grammy"
 import {Menu} from "@grammyjs/menu";
+import channelControllers from "../controllers/channelControllers.js";
+
+
 
 const bot = new Composer();
+
+
+
+
+
+
 
 
 const subscribeButton = new Menu("subscribeButton")
@@ -27,10 +35,10 @@ bot.use(async (ctx, next)=>{
         return
     }
 
-
     if(result.success && result.data.length > 0){
         const channels = result.data
-        for(const channel of channels){
+        for(let i=0; i<channels.length; i++ ){
+            const channel = channels[i]
             if(channel.channelLink === null){
                 const chatMembers = await ctx.chatMembers.getChatMember(channel.telegramId, ctx.from.id)
                 console.log(chatMembers.status)
@@ -59,11 +67,13 @@ bot.use(async (ctx, next)=>{
             })
 
         }else{
-          await  next()
+            await  next()
         }
 
     }
 })
+
+
 
 
 

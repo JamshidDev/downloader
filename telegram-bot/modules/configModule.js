@@ -2,12 +2,14 @@ import { Composer, MemorySessionStorage, session } from "grammy"
 import { I18n} from "@grammyjs/i18n"
 import {chatMembers } from "@grammyjs/chat-members"
 import {conversations} from "@grammyjs/conversations"
+import {Menu} from "@grammyjs/menu";
+import channelControllers from "../controllers/channelControllers.js";
 
 
 
-
-const bot = new Composer();
 const adapter = new MemorySessionStorage();
+const bot = new Composer();
+
 
 
 
@@ -34,7 +36,7 @@ bot.use(session({
                 adminChannels:[],
             }
         },
-        storage: adapter,
+        storage: new MemorySessionStorage(),
     },
     conversation: {},
     __language_code: {},
@@ -42,6 +44,7 @@ bot.use(session({
 
 bot.use(chatMembers(adapter));
 bot.use(conversations());
+
 
 
 
