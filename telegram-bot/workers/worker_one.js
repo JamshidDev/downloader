@@ -49,7 +49,6 @@ parentPort.on('message', async (data) => {
             }
 
         }
-        connectionDB.close()
         parentPort.postMessage({
             status:true,
             isFinish:true,

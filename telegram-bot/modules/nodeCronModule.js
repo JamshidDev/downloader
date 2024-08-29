@@ -33,7 +33,7 @@ async function sendMessage(conversation, ctx){
 
 
     if (msg.message?.text == '✅ Tasdiqlash xabarni'){
-        await ctx.reply("Barchaga xabar yuborish tugallanishini kuting...⏳")
+        await ctx.reply("Xabar yuborish boshlandi...")
         const result = await userControllers.allUser()
         if(result.status && result.data.length>0){
             const messageId = [message_text.message.message_id]

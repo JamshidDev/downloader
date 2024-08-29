@@ -25,18 +25,18 @@ const bot = new Bot(_TOKEN);
 bot.use(configModule);
 bot.use(overwriteCommandsModule);
 bot.use(userModule);
-bot.use(clientModule);
 
 // Admin module
 bot.filter(async (ctx)=> ctx.config.superAdmin).use(adminModule);
 bot.filter(async (ctx)=> ctx.config.superAdmin).use(messageSenderModule);
 bot.filter(async (ctx)=> ctx.config.superAdmin).use(dashboardModule);
 bot.filter(async (ctx)=> ctx.config.superAdmin).use(movieModule);
+bot.filter(async (ctx)=>ctx.config.superAdmin).use(nodeCronModule);
 
 // client module
 bot.filter(async (ctx)=> !ctx.config.superAdmin).use(subscriberModule);
 bot.filter(async (ctx)=> !ctx.config.superAdmin).use(channelModule);
-bot.filter(async (ctx)=>ctx.config.superAdmin).use(nodeCronModule);
+bot.filter(async (ctx)=>!ctx.config.superAdmin).use(clientModule);
 
 bot.api.setWebhook(_WEBHOOK_URL, {
     allowed_updates:allow_updates
