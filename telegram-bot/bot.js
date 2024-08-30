@@ -28,7 +28,7 @@ bot.use(userModule);
 
 // Admin module
 bot.filter(async (ctx)=> ctx.config.superAdmin).use(adminModule);
-bot.filter(async (ctx)=> ctx.config.superAdmin).use(messageSenderModule);
+// bot.filter(async (ctx)=> ctx.config.superAdmin).use(messageSenderModule);
 bot.filter(async (ctx)=> ctx.config.superAdmin).use(dashboardModule);
 bot.filter(async (ctx)=> ctx.config.superAdmin).use(movieModule);
 bot.filter(async (ctx)=>ctx.config.superAdmin).use(nodeCronModule);
