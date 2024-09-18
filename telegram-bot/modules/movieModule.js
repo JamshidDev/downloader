@@ -58,10 +58,6 @@ async function uploadMovieConversation(conversation, ctx){
     const result = await movieController._create(data)
 
     if(result.status){
-        await ctx.reply(`✅ Kino muvofaqiyati yuklandi`, {
-            reply_markup:keyboardBtn,
-            parse_mode:"HTML"
-        })
         const admin_buttons = new Keyboard()
             .text("⬇️ Kino yuklash")
             .text("⭐ Admin kanallar")
@@ -72,7 +68,7 @@ async function uploadMovieConversation(conversation, ctx){
             .text("📈 Dashboard")
             .resized()
 
-        await ctx.reply(`⚡️ Asosy menyu ⚡️`,{
+        await ctx.reply(`✅ Kino muvofaqiyati yuklandi`,{
             reply_markup:admin_buttons
         })
 

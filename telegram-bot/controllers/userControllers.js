@@ -46,14 +46,13 @@ const remove = async (telegramId) => {
 
 const allUser = async ()=>{
     try {
-        let users = await UserModels.find({active:true}).exec();
+        let users = await UserModels.find({active:true},{}, { enableUtf8Validation: false }).exec();
         return {
             status:true,
             data:users,
             message: "Successfully removed",
         }
     } catch (error) {
-        console.log(error)
         return {
             status:false,
             data:[],

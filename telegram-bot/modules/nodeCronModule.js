@@ -1,6 +1,5 @@
 import {Composer, Keyboard, MemorySessionStorage, session} from "grammy"
 import {Worker} from "worker_threads"
-import mongoose from "mongoose"
 import userControllers from "../controllers/userControllers.js";
 import {createConversation} from "@grammyjs/conversations"
 
@@ -35,6 +34,7 @@ async function sendMessage(conversation, ctx){
     if (msg.message?.text == '✅ Tasdiqlash xabarni'){
         await ctx.reply("Xabar yuborish boshlandi...")
         const result = await userControllers.allUser()
+        console.log(result)
         if(result.status && result.data.length>0){
             const messageId = [message_text.message.message_id]
             const useridList = result.data.map(v=>v.telegramId)
@@ -56,7 +56,19 @@ async function sendMessage(conversation, ctx){
                     console.log(msg)
                 }else if(msg?.status && msg.isFinish){
                     //finish task
-                    await ctx.reply(`Xabar yuborish yakunlandi! ${successMessagedCount}`)
+                    const admin_buttons = new Keyboard()
+                        .text("⬇️ Kino yuklash")
+                        .text("⭐ Admin kanallar")
+                        .row()
+                        .text("✍️ Xabar yozish")
+                        .text("🔗 Link qo'shish")
+                        .row()
+                        .text("📈 Dashboard")
+                        .resized()
+
+                    await ctx.reply(`Xabar yuborish yakunlandi! ${successMessagedCount}`,{
+                        reply_markup:admin_buttons
+                    })
 
                 }else{
                     //unexpected error

@@ -16,6 +16,7 @@ const DB_CONNECTION_STRING = process.env.DB_URL;
 
 parentPort.on('message', async (data) => {
     try{
+        console.log(DB_CONNECTION_STRING)
        const connectionDB = await mongoose.connect(DB_CONNECTION_STRING,).then(()=>{
             parentPort.postMessage({
                 status:true,
@@ -23,6 +24,7 @@ parentPort.on('message', async (data) => {
                 msg:"Connect db"
             })
         }).catch((error)=>{
+           console.log(error)
             parentPort.postMessage({
                 status:false,
                 userId:null,
