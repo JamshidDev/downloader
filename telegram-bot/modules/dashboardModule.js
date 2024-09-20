@@ -11,8 +11,14 @@ bot.use(createConversation(dashboardConversation))
 
 
 async function dashboardConversation(conversation, ctx){
-    let keyboardBtn = new Keyboard()
-        .text("🛑 Bekor qilish")
+    const admin_buttons = new Keyboard()
+        .text("⬇️ Kino yuklash")
+        .text("⭐ Admin kanallar")
+        .row()
+        .text("✍️ Xabar yozish")
+        .text("🔗 Link qo'shish")
+        .row()
+        .text("📈 Dashboard")
         .resized()
 
     const result = await dashboardController.dashboardBot()
@@ -31,28 +37,14 @@ async function dashboardConversation(conversation, ctx){
 📊 Barcha kinolar: <b>${result.data.allMovies}</b>   
 🔋 Barcha qidiruvlar: <b>-:-</b>    
     `, {
-            reply_markup:keyboardBtn,
+            reply_markup:admin_buttons,
             parse_mode:"HTML"
         })
 
 
-        const admin_buttons = new Keyboard()
-            .text("⬇️ Kino yuklash")
-            .text("⭐ Admin kanallar")
-            .row()
-            .text("✍️ Xabar yozish")
-            .text("🔗 Link qo'shish")
-            .row()
-            .text("📈 Dashboard")
-            .resized()
-
-        await ctx.reply(`⚡️ Asosy menyu ⚡️`,{
-            reply_markup:admin_buttons
-        })
-
     }else{
         await ctx.reply(`🤯 Kutilmagan xatolik yuz berdi`, {
-            reply_markup:keyboardBtn,
+            reply_markup:admin_buttons,
             parse_mode:"HTML"
         })
     }

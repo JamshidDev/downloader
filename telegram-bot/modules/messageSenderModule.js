@@ -120,6 +120,7 @@ async function adminChannelConversation(conversation, ctx){
         .resized()
 
         let list = await channelControllers.adminChannels()
+    console.log(list)
         if(list.data.length === 0){
             await ctx.reply("☹️ Sizda admin kanallar yo'q")
             ctx.conversation.exit()
@@ -157,6 +158,7 @@ bot.hears("🔗 Link qo'shish", async (ctx)=>{
     await ctx.conversation.enter("addLinkConversation");
 })
 bot.hears("⭐ Admin kanallar", async (ctx)=>{
+    console.log(ctx)
     await ctx.conversation.enter("adminChannelConversation");
 })
 
