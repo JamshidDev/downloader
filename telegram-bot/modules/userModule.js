@@ -60,6 +60,7 @@ _Menga kino kodini yuboring!_
 bot.on("my_chat_member", async (ctx) => {
     const status = ctx.update.my_chat_member.new_chat_member.status;
     const type = ctx.update.my_chat_member.chat.type;
+    console.log(ctx.update)
     if(type === 'channel'){
         if(status === 'administrator'){
             let data = {

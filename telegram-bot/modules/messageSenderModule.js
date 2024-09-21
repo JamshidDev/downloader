@@ -145,6 +145,7 @@ async function adminChannelConversation(conversation, ctx){
         .text("🛑 Bekor qilish")
         .resized()
         let list = await channelControllers.adminChannels()
+    console.log(list)
         if(list.data.length === 0){
             await ctx.reply("☹️ Sizda admin kanallar yo'q", {
                 reply_markup:admin_buttons,
@@ -228,6 +229,7 @@ bot.hears("🔗 Link qo'shish", async (ctx)=>{
     })
 })
 bot.hears("⭐ Admin kanallar", async (ctx)=>{
+    console.log(ctx)
     await ctx.conversation.enter("adminChannelConversation");
 })
 bot.hears("➕ Link", async (ctx)=>{

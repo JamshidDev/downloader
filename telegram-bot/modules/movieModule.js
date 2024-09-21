@@ -56,20 +56,20 @@ async function uploadMovieConversation(conversation, ctx){
     data.fileId = ctx.message.video.file_id
     data.caption = ctx.message.caption || null
     const result = await movieController._create(data)
-    const admin_buttons = new Keyboard()
-        .text("⬇️ Kino yuklash")
-        .text("⭐ Admin kanallar")
-        .row()
-        .text("✍️ Xabar yozish")
-        .text("🔗 Link qo'shish")
-        .row()
-        .text("📈 Dashboard")
-        .resized()
 
     if(result.status){
-        await ctx.reply(`✅ Kino muvofaqiyati yuklandi`, {
-            reply_markup:admin_buttons,
-            parse_mode:"HTML"
+        const admin_buttons = new Keyboard()
+            .text("⬇️ Kino yuklash")
+            .text("⭐ Admin kanallar")
+            .row()
+            .text("✍️ Xabar yozish")
+            .text("🔗 Link qo'shish")
+            .row()
+            .text("📈 Dashboard")
+            .resized()
+
+        await ctx.reply(`✅ Kino muvofaqiyati yuklandi`,{
+            reply_markup:admin_buttons
         })
 
     }else{

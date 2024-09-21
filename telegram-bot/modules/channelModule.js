@@ -2,8 +2,9 @@ import { Composer } from "grammy"
 import channelControllers from "../controllers/channelControllers.js";
 import {Menu} from "@grammyjs/menu";
 
-const bot = new Composer();
+const composer = new Composer();
 
+const bot = composer.chatType('private')
 
 const subscribeButton = new Menu("subscribeButton")
     .dynamic(async (ctx,range)=>{
@@ -33,7 +34,6 @@ bot.use(async (ctx, next)=>{
         for(const channel of channels){
             if(channel.channelLink === null){
                 const chatMembers = await ctx.chatMembers.getChatMember(channel.telegramId, ctx.from.id)
-                console.log(chatMembers.status)
                 if(chatMembers.status === 'left'){
                     subscribeStatus = true
                     ctx.session.session_db.channels.push({
