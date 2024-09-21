@@ -117,5 +117,31 @@ const updateStatus = async(id, ad)=>{
     }
 }
 
+const removeChannel = async(id)=>{
+    try{
+        await ChannelModels.findByIdAndUpdate(id,{
+            active:false,
+            channelLink:null,
+        })
+        const list = await ChannelModels.find({
+            active:true,
+        })
 
-export default {store, remove, index, adminChannels, updateStatus}
+        return {
+            success:true,
+            data:list,
+            message: null,
+        }
+    }catch (error){
+        console.log(error)
+        return {
+            success:false,
+            data:[],
+            message: "server error",
+        }
+
+    }
+}
+
+
+export default {store, remove, index, adminChannels, updateStatus,removeChannel}

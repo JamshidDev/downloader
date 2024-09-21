@@ -10,6 +10,17 @@ bot.use(createConversation(sendMessage))
 
 
 async function sendMessage(conversation, ctx){
+
+    const admin_buttons = new Keyboard()
+        .text("⬇️ Kino yuklash")
+        .text("⭐ Admin kanallar")
+        .row()
+        .text("✍️ Xabar yozish")
+        .text("🔗 Link qo'shish")
+        .row()
+        .text("📈 Dashboard")
+        .resized()
+
     await ctx.reply(`
     <b>⚠️ Barcha foydalanuvchilarga xabar jo'natish</b> 
     
@@ -19,11 +30,11 @@ async function sendMessage(conversation, ctx){
     })
     const message_text = await conversation.wait();
     let keyborad = new Keyboard()
-        .text("❌ Bekor qilish xabarni")
-        .text("✅ Tasdiqlash xabarni")
+        .text("❌ Bekor qilish")
+        .text("✅ Tasdiqlash")
         .resized();
     await ctx.reply(`
-    <i>Xabarni barcha foydalanuvchilarga yuborish uchun <b>✅ Tasdiqlash xabarni</b> tugmasini bosing!</i> 
+    <i>Xabarni barcha foydalanuvchilarga yuborish uchun <b>✅ Tasdiqlash</b> tugmasini bosing!</i> 
        
         `, {
         reply_markup: keyborad,
@@ -32,8 +43,11 @@ async function sendMessage(conversation, ctx){
     const msg = await conversation.wait()
 
 
-    if (msg.message?.text == '✅ Tasdiqlash xabarni'){
-        await ctx.reply("Xabar yuborish boshlandi...")
+    if (msg.message?.text == '✅ Tasdiqlash'){
+        await ctx.reply("Xabar yuborish boshlandi...",{
+            reply_markup:admin_buttons,
+            parse_mode:"HTML"
+        })
         const result = await userControllers.allUser()
         if(result.status && result.data.length>0){
             const messageId = [message_text.message.message_id]
@@ -53,10 +67,13 @@ async function sendMessage(conversation, ctx){
                 }else if(msg?.status && !msg.isFinish){
                     //success send message
                     successMessagedCount ++
-                    console.log(msg)
+                    console.log(successMessagedCount)
                 }else if(msg?.status && msg.isFinish){
                     //finish task
-                    await ctx.reply(`Xabar yuborish yakunlandi! ${successMessagedCount}`)
+                    await ctx.reply(`Xabar yuborish yakunlandi! ${successMessagedCount -1}`,{
+                        reply_markup:admin_buttons,
+                        parse_mode:"HTML"
+                    })
 
                 }else{
                     //unexpected error

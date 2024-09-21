@@ -2,8 +2,6 @@ import { Composer, MemorySessionStorage, session } from "grammy"
 import { I18n} from "@grammyjs/i18n"
 import {chatMembers } from "@grammyjs/chat-members"
 import {conversations} from "@grammyjs/conversations"
-import {Menu} from "@grammyjs/menu";
-import channelControllers from "../controllers/channelControllers.js";
 
 
 

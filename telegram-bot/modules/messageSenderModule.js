@@ -22,6 +22,7 @@ const admin_buttons = new Keyboard()
 
 bot.use(createConversation(addLinkConversation))
 bot.use(createConversation(adminChannelConversation))
+bot.use(createConversation(removeAdminChannelConversation))
 
 
 const adminChannel = new Menu("adminChannel")
@@ -48,6 +49,33 @@ const adminChannel = new Menu("adminChannel")
         })
     })
 bot.use(adminChannel)
+
+const removeAdminChannel = new Menu("removeAdminChannel")
+    .dynamic(async (ctx,range)=>{
+        let list = await ctx.session.session_db.adminChannels
+        list.forEach((item)=>{
+            range
+                .text(`❌ ${item.name}`, async (ctx)=>{
+
+                    const result = await channelControllers.removeChannel(item.id)
+                    if(result.success && result.data.length>0){
+                        console.log("ok")
+                        ctx.session.session_db.adminChannels = result.data.map((item)=>({
+                            id:item._id,
+                            name:item.channelLink===null? item.username : item.channelLink,
+                            ad:item.ad
+                        }))
+
+                        await ctx.menu.update();
+                    }else{
+                        await ctx.reply("Kanal yo'q...")
+                    }
+                })
+                .row()
+
+        })
+    })
+bot.use(removeAdminChannel)
 
 
 
@@ -111,18 +139,17 @@ Masalan: <i>https://timeweb.cloud.com</i>
 
 }
 
-
-
 async function adminChannelConversation(conversation, ctx){
     ctx.session.session_db.adminChannels = []
     let keyboardBtn = new Keyboard()
         .text("🛑 Bekor qilish")
         .resized()
-
         let list = await channelControllers.adminChannels()
         if(list.data.length === 0){
-            await ctx.reply("☹️ Sizda admin kanallar yo'q")
-            ctx.conversation.exit()
+            await ctx.reply("☹️ Sizda admin kanallar yo'q", {
+                reply_markup:admin_buttons,
+            })
+
 
         }else{
             ctx.session.session_db.adminChannels = list.data.map((item)=>({
@@ -149,15 +176,65 @@ async function adminChannelConversation(conversation, ctx){
 
 }
 
+async function removeAdminChannelConversation(conversation, ctx){
+    ctx.session.session_db.adminChannels = []
+    let keyboardBtn = new Keyboard()
+        .text("🛑 Bekor qilish")
+        .resized()
+
+    let list = await channelControllers.adminChannels()
+    if(list.data.length === 0){
+        await ctx.reply("☹️ Sizda admin kanallar yo'q")
+
+    }else{
+        ctx.session.session_db.adminChannels = list.data.map((item)=>({
+            id:item._id,
+            name:item.channelLink===null? item.username : item.channelLink,
+            ad:item.ad
+        }))
+
+        await ctx.reply(`
+<b>Admin kanallar</b>
+
+<i>Kanal ustiga bosish orqali uni o'chiring</i>
+
+            `, {
+            reply_markup:removeAdminChannel,
+            parse_mode:"HTML"
+        })
+
+
+    }
+
+}
+
 
 
 
 
 bot.hears("🔗 Link qo'shish", async (ctx)=>{
-    await ctx.conversation.enter("addLinkConversation");
+    const actionButton = new Keyboard()
+        .text("➕ Link")
+        .row()
+        .text("➕ Private Link")
+        .row()
+        .text("🗑 Delete")
+        .row()
+        .text("🛑 Bekor qilish")
+        .resized()
+    await ctx.reply("Link turini tanlang",{
+        reply_markup:actionButton,
+        parse_mode:"HTML"
+    })
 })
 bot.hears("⭐ Admin kanallar", async (ctx)=>{
     await ctx.conversation.enter("adminChannelConversation");
+})
+bot.hears("➕ Link", async (ctx)=>{
+    await ctx.conversation.enter("addLinkConversation");
+})
+bot.hears("🗑 Delete", async (ctx)=>{
+    await ctx.conversation.enter("removeAdminChannelConversation");
 })
 
 
