@@ -82,7 +82,6 @@ const adminChannels = async()=>{
             message: null,
         }
     }catch (error){
-        console.log(error)
         return {
             success:false,
             data:[],

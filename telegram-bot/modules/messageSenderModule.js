@@ -141,11 +141,7 @@ Masalan: <i>https://timeweb.cloud.com</i>
 
 async function adminChannelConversation(conversation, ctx){
     ctx.session.session_db.adminChannels = []
-    let keyboardBtn = new Keyboard()
-        .text("🛑 Bekor qilish")
-        .resized()
         let list = await channelControllers.adminChannels()
-    console.log(list)
         if(list.data.length === 0){
             await ctx.reply("☹️ Sizda admin kanallar yo'q", {
                 reply_markup:admin_buttons,
