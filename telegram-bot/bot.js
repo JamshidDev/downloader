@@ -18,7 +18,7 @@ import clientModule from "./modules/clientModule.js";
 let _TOKEN = process.env.BOT_TOKEN;
 let _DOMAIN = process.env.DOMAIN_URL;
 let _WEBHOOK_URL = `${_DOMAIN}/${_TOKEN}`;
-const allow_updates = ["my_chat_member", "chat_member", "message", "callback_query", "inline_query"];
+const allow_updates = ["my_chat_member", "chat_member", "message", "callback_query", "inline_query", "chat_join_request"];
 
 const bot = new Bot(_TOKEN);
 

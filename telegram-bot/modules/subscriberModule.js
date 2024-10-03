@@ -1,6 +1,7 @@
 import { Composer, MemorySessionStorage, session } from "grammy"
 import {Menu} from "@grammyjs/menu";
 import channelControllers from "../controllers/channelControllers.js";
+import requestController from "../controllers/requestController.js";
 
 
 
@@ -16,12 +17,13 @@ const bot = new Composer();
 const subscribeButton = new Menu("subscribeButton")
     .dynamic(async (ctx,range)=>{
         let list = await ctx.session.session_db.channels
+        console.log(list)
         list.forEach((item)=>{
             range
-                .url("➕ Obuna bo'lish", item.type ==='channel'? `https://t.me/${item.link}` : item.link)
+                .url("➕ Obuna bo'lish", item.type ==='PublicChannel'? `https://t.me/${item.link}` : item.link)
                 .row()
         })
-    }).text("✅ Tekshirish")
+    })
 
 bot.use(subscribeButton)
 
@@ -39,20 +41,26 @@ bot.use(async (ctx, next)=>{
         const channels = result.data
         for(let i=0; i<channels.length; i++ ){
             const channel = channels[i]
-            if(channel.channelLink === null){
+
+            if(channel.type !== 'Link'){
+                console.log(channel.telegramId)
                 const chatMembers = await ctx.chatMembers.getChatMember(channel.telegramId, ctx.from.id)
                 console.log(chatMembers.status)
                 if(chatMembers.status === 'left'){
-                    subscribeStatus = true
-                    ctx.session.session_db.channels.push({
-                        link:channel.username,
-                        type:'channel'
-                    })
+                    let joinRequest = await requestController.userSendJoinRequest(channel.telegramId, ctx.from.id)
+                    console.log(joinRequest)
+                    if(joinRequest.success && !joinRequest.joinRequest){
+                        subscribeStatus = true
+                        ctx.session.session_db.channels.push({
+                            link:channel.type === 'PublicChannel'? channel.username : channel.channelLink ,
+                            type:channel.type,
+                        })
+                    }
                 }
             }else{
                 ctx.session.session_db.channels.push({
                     link:channel.channelLink,
-                    type:'link'
+                    type:channel.type
                 })
             }
         }

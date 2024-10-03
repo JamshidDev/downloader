@@ -32,6 +32,7 @@ bot.use(session({
                 },
                 channels:[],
                 adminChannels:[],
+                selectedChannelId:null
             }
         },
         storage: new MemorySessionStorage(),

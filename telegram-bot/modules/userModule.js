@@ -1,7 +1,7 @@
 import {Composer, Keyboard} from "grammy"
 import channelControllers from "../controllers/channelControllers.js";
 import userControllers from "../controllers/userControllers.js";
-
+import requestController from "../controllers/requestController.js";
 const bot = new Composer();
 
 
@@ -60,8 +60,8 @@ _Menga kino kodini yuboring!_
 bot.on("my_chat_member", async (ctx) => {
     const status = ctx.update.my_chat_member.new_chat_member.status;
     const type = ctx.update.my_chat_member.chat.type;
+    console.log(status)
     if(type === 'channel'){
-        console.log(ctx.update.my_chat_member.chat?.username)
         if(status === 'administrator'){
             let data = {
                 telegramId: ctx.update.my_chat_member.chat.id,
@@ -100,6 +100,25 @@ bot.on("my_chat_member", async (ctx) => {
         }
     }
 });
+
+
+bot.on("chat_join_request", async(ctx)=>{
+    let data = {
+        telegramId:ctx.update.chat_join_request.from.id,
+        firstname:ctx.update.chat_join_request.from.first_name,
+        lastname:ctx.update.chat_join_request.from?.last_name,
+        username:ctx.update.chat_join_request.from?.username,
+        languageCode:ctx.update.chat_join_request.from.language_code,
+        active:true,
+    }
+
+    let data2 = {
+        channelId:ctx.update.chat_join_request.chat.id,
+        userId:ctx.update.chat_join_request.from.id,
+    }
+    await userControllers.store(data)
+    await requestController.store(data2)
+})
 
 
 

@@ -34,7 +34,7 @@ const store = async (data) => {
 
 const remove = async (id) => {
     try {
-        await ChannelModels.updateOne({telegramId:id},{
+        await ChannelModels.deleteOne({telegramId:id},{
             active:false,
             ad:false
         })
@@ -116,12 +116,9 @@ const updateStatus = async(id, ad)=>{
     }
 }
 
-const removeChannel = async(id)=>{
+const removeChannel = async(_id)=>{
     try{
-        await ChannelModels.findByIdAndUpdate(id,{
-            active:false,
-            channelLink:null,
-        })
+        await ChannelModels.deleteOne({_id})
         const list = await ChannelModels.find({
             active:true,
         })
@@ -142,5 +139,48 @@ const removeChannel = async(id)=>{
     }
 }
 
+const privateChannels = async()=>{
+    try{
+        const list = await ChannelModels.find({
+            active:true,
+            type:"PrivateChannel"
+        })
+        return {
+            success:true,
+            data:list,
+            message: null,
+        }
+    }catch (error){
+        return {
+            success:false,
+            data:[],
+            message: "server error",
+        }
 
-export default {store, remove, index, adminChannels, updateStatus,removeChannel}
+    }
+}
+
+const updatePrivateChannelLink = async(id, channelLink)=>{
+    try{
+        let result = await ChannelModels.findByIdAndUpdate(id,{
+            channelLink,
+        })
+
+        console.log(result)
+
+        return {
+            success:true,
+            message: null,
+        }
+    }catch (error){
+        return {
+            success:false,
+            data:[],
+            message: "server error",
+        }
+
+    }
+}
+
+
+export default {store, remove, index, adminChannels, updateStatus,removeChannel, privateChannels, updatePrivateChannelLink}
