@@ -61,7 +61,7 @@ const removeAdminChannel = new Menu("removeAdminChannel")
                     if(result.success && result.data.length>0){
                         ctx.session.session_db.adminChannels = result.data.map((item)=>({
                             id:item._id,
-                            name:item.title,
+                            name:item.type==='PublicChannel'? item.title : item.channelLink,
                             ad:item.ad
                         }))
 
