@@ -60,19 +60,20 @@ _Menga kino kodini yuboring!_
 bot.on("my_chat_member", async (ctx) => {
     const status = ctx.update.my_chat_member.new_chat_member.status;
     const type = ctx.update.my_chat_member.chat.type;
-    console.log(ctx.update)
     if(type === 'channel'){
+        console.log(ctx.update.my_chat_member.chat?.username)
         if(status === 'administrator'){
             let data = {
                 telegramId: ctx.update.my_chat_member.chat.id,
                 userId: ctx.update.my_chat_member.from.id,
                 title: ctx.update.my_chat_member.chat.title,
                 username: ctx.update.my_chat_member.chat.username,
-                type: ctx.update.my_chat_member.chat.type,
+                type: Boolean(ctx.update.my_chat_member.chat?.username)? 'PublicChannel' : 'PrivateChannel',
                 newChat: ctx.update.my_chat_member.new_chat_member,
             }
             await channelControllers.store(data)
-        }else{
+        }
+        else{
             // status is left or member
             let telegram_id = ctx.update.my_chat_member.chat.id;
             await channelControllers.remove(telegram_id)

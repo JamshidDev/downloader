@@ -53,16 +53,15 @@ bot.use(adminChannel)
 const removeAdminChannel = new Menu("removeAdminChannel")
     .dynamic(async (ctx,range)=>{
         let list = await ctx.session.session_db.adminChannels
-        list.forEach((item)=>{
+        list.forEach((item, idx)=>{
             range
-                .text(`❌ ${item.name}`, async (ctx)=>{
+                .text(`${idx+1} 🗑`, async (ctx)=>{
 
                     const result = await channelControllers.removeChannel(item.id)
                     if(result.success && result.data.length>0){
-                        console.log("ok")
                         ctx.session.session_db.adminChannels = result.data.map((item)=>({
                             id:item._id,
-                            name:item.channelLink===null? item.username : item.channelLink,
+                            name:item.title,
                             ad:item.ad
                         }))
 
@@ -71,9 +70,11 @@ const removeAdminChannel = new Menu("removeAdminChannel")
                         await ctx.reply("Kanal yo'q...")
                     }
                 })
-                .row()
-
+            if ((idx + 1) % 4 === 0) {
+                range.row();
+            }
         })
+
     })
 bot.use(removeAdminChannel)
 
@@ -91,7 +92,7 @@ async function addLinkConversation(conversation, ctx){
         telegramId:null,
         userId:ctx.from.id,
         title:"Link",
-        type:'link',
+        type:'Link',
         channelLink:null,
     }
     let keyboardBtn = new Keyboard()
@@ -175,27 +176,24 @@ async function adminChannelConversation(conversation, ctx){
 
 async function removeAdminChannelConversation(conversation, ctx){
     ctx.session.session_db.adminChannels = []
-    let keyboardBtn = new Keyboard()
-        .text("🛑 Bekor qilish")
-        .resized()
-
     let list = await channelControllers.adminChannels()
     if(list.data.length === 0){
         await ctx.reply("☹️ Sizda admin kanallar yo'q")
 
     }else{
-        ctx.session.session_db.adminChannels = list.data.map((item)=>({
+        const channels = list.data.map((item)=>({
             id:item._id,
-            name:item.channelLink===null? item.username : item.channelLink,
+            name:item.type==='PublicChannel'? item.title : item.channelLink,
             ad:item.ad
         }))
+        ctx.session.session_db.adminChannels = channels
 
-        await ctx.reply(`
-<b>Admin kanallar</b>
+        let textMessage = '<b>Admin kanallar</b>'
+        channels.map((v,idx)=>{
+            textMessage = textMessage +`\n ${idx+1}) ${v.ad? '🟢' : '🔴'} ${v.name}`
+        })
 
-<i>Kanal ustiga bosish orqali uni o'chiring</i>
-
-            `, {
+        await ctx.reply(textMessage, {
             reply_markup:removeAdminChannel,
             parse_mode:"HTML"
         })
@@ -225,13 +223,16 @@ bot.hears("🔗 Link qo'shish", async (ctx)=>{
     })
 })
 bot.hears("⭐ Admin kanallar", async (ctx)=>{
-    console.log(ctx)
     await ctx.conversation.enter("adminChannelConversation");
 })
 bot.hears("➕ Link", async (ctx)=>{
     await ctx.conversation.enter("addLinkConversation");
 })
 bot.hears("🗑 Delete", async (ctx)=>{
+    await ctx.conversation.enter("removeAdminChannelConversation");
+})
+
+bot.command('help', async(ctx)=>{
     await ctx.conversation.enter("removeAdminChannelConversation");
 })
 
