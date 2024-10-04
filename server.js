@@ -39,18 +39,20 @@ app.use("/organization",organizationRouter);
 app.use(`/${token}`, webhookCallback(bot, 'express'))
 
 
+const port = process.env.PORT;
+
 app.use((req, res) => {
     res.status(404).json({
         status: false,
         data: null,
-        message: 'Not found Page :)',
+        message: `server port ${port}`,
     })
 })
 
 
 
 
-const port = process.env.PORT;
+
 app.listen(port, ()=>{
     console.log(`Server is listening on ${port}`)
 });
