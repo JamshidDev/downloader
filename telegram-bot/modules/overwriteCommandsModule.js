@@ -1,14 +1,13 @@
 
 import { Composer } from "grammy"
-
+import dotenv from 'dotenv';
+dotenv.config();
 
 const bot = new Composer();
-
-
-
+let AdminIdList = process.env.ADMIN_IDS;
 
 bot.use(async (ctx, next)=>{
-    const superAdminTelegramIdList = [1038293334]; //1038293334
+    const superAdminTelegramIdList = AdminIdList
     const overwriteCommandsList = ["🛑 Bekor qilish"];
     if (overwriteCommandsList.includes(ctx.message?.text)) {
         const stats = await ctx.conversation.active();

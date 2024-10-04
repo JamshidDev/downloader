@@ -3,6 +3,7 @@ import express from "express"
 import cors from 'cors';
 import {bot,token} from "./telegram-bot/bot.js"
 import "./config/mongodb.js";
+// import "./telegram-bot/modules/migrationModule.js"
 
 import permissionRouter from "./router/permissionRouter.js";
 import roleRouter from "./router/roleRouter.js";
