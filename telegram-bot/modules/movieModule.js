@@ -16,12 +16,11 @@ pm.use(createConversation(uploadMovieConversation))
 
 
 async function uploadMovieConversation(conversation, ctx){
-    let data = {
-        movieCode:null,
-        fileId:null,
-        caption:null,
-    }
+    let movieCode = null
+    let movies = []
     let keyboardBtn = new Keyboard()
+        .text("✅ Yuklash")
+        .row()
         .text("🛑 Bekor qilish")
         .resized()
     await ctx.reply(`Kino kodini yozing`, {
@@ -38,23 +37,45 @@ async function uploadMovieConversation(conversation, ctx){
             ctx = await conversation.wait();
         } while (!ctx.message?.text);
     }
-    data.movieCode = ctx.message.text
+    movieCode = ctx.message.text
 
-    await ctx.reply(`Kino videosini yuboring`, {
-        reply_markup:keyboardBtn,
-        parse_mode:"HTML"
-    })
-    ctx = await conversation.wait();
-    if (!ctx.message?.video) {
-        do {
-            await ctx.reply("⚠️ <b>Noto'g'ri ma'lumot</b>\n\n <i>Kino videosini yuboring!</i> ", {
-                parse_mode: "HTML",
-            });
-            ctx = await conversation.wait();
-        } while (!ctx.message?.video);
+
+
+
+
+
+    while(true){
+        await ctx.reply(`Kino videosini yuboring`, {
+            reply_markup:keyboardBtn,
+            parse_mode:"HTML"
+        })
+        ctx = await conversation.wait();
+
+
+        if(ctx.message.text === '✅ Yuklash'){
+            break
+        }
+
+        if (!ctx.message?.video) {
+            do {
+                await ctx.reply("⚠️ <b>Noto'g'ri ma'lumot</b>\n\n <i>Kino videosini yuboring!</i> ", {
+                    parse_mode: "HTML",
+                });
+                ctx = await conversation.wait();
+            } while (!ctx.message?.video);
+        }
+        let fileId = ctx.message.video.file_id
+        let caption = ctx.message.caption || null
+        movies.push({
+            fileId,
+            caption
+        })
     }
-    data.fileId = ctx.message.video.file_id
-    data.caption = ctx.message.caption || null
+
+    let data = {
+        movieCode,
+        movies,
+    }
     const result = await movieController._create(data)
 
     if(result.status){

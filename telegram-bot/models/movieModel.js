@@ -4,14 +4,22 @@ import mongoose from "mongoose"
 const movieSchema = mongoose.Schema({
     fileId:{
         type:String,
-        required:true,
+        default:null,
     },
     caption:{
         type:String,
+        default:null,
     },
     movieCode:{
         type:String,
         required:true,
+    },
+    movies:{
+        type:[{
+            fileId:String,
+            caption:String,
+        }],
+        default: []
     },
     active: {
         type: Boolean,
