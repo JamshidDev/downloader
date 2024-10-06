@@ -27,7 +27,7 @@ async function dashboardConversation(conversation, ctx){
 📊 Barcha kinolar: <b>${result.data.allMovies}</b>   
 🔋 Barcha qidiruvlar: <b>-:-</b>    
     `, {
-            reply_markup:admin_buttons,
+            reply_markup:keyboards.mainAdminKeyboard,
             parse_mode:"HTML"
         })
 
