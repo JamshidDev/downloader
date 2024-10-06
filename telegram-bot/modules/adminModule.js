@@ -2,7 +2,7 @@ import { Composer,Keyboard } from "grammy"
 import {createConversation} from "@grammyjs/conversations"
 import channelControllers from "../controllers/channelControllers.js";
 const bot = new Composer();
-
+import keyboards from "../keyboards/keyboards.js";
 const pm = bot.chatType("private");
 
 
@@ -12,18 +12,8 @@ pm.use(createConversation(base_menu))
 
 
 async function base_menu(conversation, ctx){
-    const admin_buttons = new Keyboard()
-        .text("⬇️ Kino yuklash")
-        .text("⭐ Admin kanallar")
-        .row()
-        .text("✍️ Xabar yozish")
-        .text("🔗 Link qo'shish")
-        .row()
-        .text("📈 Dashboard")
-        .resized()
-
     await ctx.reply(`⚡️ Asosy menyu ⚡️`,{
-        reply_markup:admin_buttons
+        reply_markup:keyboards.mainAdminKeyboard
     })
 }
 

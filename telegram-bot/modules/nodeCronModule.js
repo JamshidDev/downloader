@@ -3,22 +3,13 @@ import {Worker} from "worker_threads"
 import mongoose from "mongoose"
 import userControllers from "../controllers/userControllers.js";
 import {createConversation} from "@grammyjs/conversations"
-
+import keyboards from "../keyboards/keyboards.js";
 const bot = new Composer();
 
 bot.use(createConversation(sendMessage))
 
 
 async function sendMessage(conversation, ctx){
-    const admin_buttons = new Keyboard()
-        .text("⬇️ Kino yuklash")
-        .text("⭐ Admin kanallar")
-        .row()
-        .text("✍️ Xabar yozish")
-        .text("🔗 Link qo'shish")
-        .row()
-        .text("📈 Dashboard")
-        .resized()
     await ctx.reply(`
     <b>⚠️ Barcha foydalanuvchilarga xabar jo'natish</b> 
     
@@ -43,7 +34,7 @@ async function sendMessage(conversation, ctx){
 
     if (msg.message?.text === '✅ Tasdiqlash'){
         await ctx.reply("Xabar yuborish boshlandi...",{
-            reply_markup:admin_buttons,
+            reply_markup:keyboards.mainAdminKeyboard,
         })
         const result = await userControllers.allUser()
         if(result.status && result.data.length>0){
@@ -70,7 +61,7 @@ async function sendMessage(conversation, ctx){
 
 
                     await ctx.reply(`Xabar yuborish yakunlandi! ${(successMessagedCount-1)}`,{
-                        reply_markup:admin_buttons
+                        reply_markup:keyboards.mainAdminKeyboard
                     })
 
                 }else{

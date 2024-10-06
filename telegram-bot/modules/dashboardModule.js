@@ -2,7 +2,7 @@ import { Composer,Keyboard } from "grammy"
 import dashboardController from "../controllers/dashboardController.js";
 import {createConversation} from "@grammyjs/conversations";
 const composer = new Composer();
-
+import keyboards from "../keyboards/keyboards.js";
 const bot = composer.chatType("private");
 
 
@@ -11,16 +11,6 @@ bot.use(createConversation(dashboardConversation))
 
 
 async function dashboardConversation(conversation, ctx){
-    const admin_buttons = new Keyboard()
-        .text("⬇️ Kino yuklash")
-        .text("⭐ Admin kanallar")
-        .row()
-        .text("✍️ Xabar yozish")
-        .text("🔗 Link qo'shish")
-        .row()
-        .text("📈 Dashboard")
-        .resized()
-
     const result = await dashboardController.dashboardBot()
 
     if(result.status){
@@ -44,7 +34,7 @@ async function dashboardConversation(conversation, ctx){
 
     }else{
         await ctx.reply(`🤯 Kutilmagan xatolik yuz berdi`, {
-            reply_markup:admin_buttons,
+            reply_markup:keyboards.mainAdminKeyboard,
             parse_mode:"HTML"
         })
     }

@@ -107,6 +107,31 @@ const _searchMovieByCode =async (code)=>{
     }
 }
 
+const _deleteMovieByCode =async (code)=>{
+    try{
+        const movie = await MovieModel.findOne({movieCode:code, active:true})
+
+        if(movie){
+            await MovieModel.deleteOne({movieCode:code})
+            return {
+                status: true,
+                msg:` ✅ Kino o'chirildi. kod:${code}`,
+            }
+        }else{
+            return {
+                status: false,
+                msg:`⚠️ Kino topilmadi!`,
+            }
+        }
+
+    }catch(error){
+        return {
+            status: false,
+            msg: "Server xatosi"
+        }
+    }
+}
+
 
 
 
@@ -118,4 +143,5 @@ export default  {
     _getById,
     _getPagination,
     _searchMovieByCode,
+    _deleteMovieByCode,
 }

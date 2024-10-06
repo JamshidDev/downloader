@@ -3,19 +3,11 @@ const composer = new Composer();
 import {createConversation} from "@grammyjs/conversations";
 import channelControllers from "../controllers/channelControllers.js";
 import requestController from "../controllers/requestController.js";
+import movieController from "../controllers/movieController.js";
 import {Menu} from "@grammyjs/menu";
-
+import keyboards from "../keyboards/keyboards.js";
 const bot = composer.chatType("private");
 
-const admin_buttons = new Keyboard()
-    .text("⬇️ Kino yuklash")
-    .text("⭐ Admin kanallar")
-    .row()
-    .text("✍️ Xabar yozish")
-    .text("🔗 Link qo'shish")
-    .row()
-    .text("📈 Dashboard")
-    .resized()
 
 
 
@@ -25,6 +17,7 @@ bot.use(createConversation(addLinkConversation))
 bot.use(createConversation(adminChannelConversation))
 bot.use(createConversation(removeAdminChannelConversation))
 bot.use(createConversation(privateChannelLinkConversation))
+bot.use(createConversation(deleteMovieByCodeConversation))
 
 
 const adminChannel = new Menu("adminChannel")
@@ -149,7 +142,7 @@ Masalan: <i>https://timeweb.cloud.com</i>
             parse_mode:"HTML"
         })
         await ctx.reply(`⚡️ Asosy menyu ⚡️`,{
-            reply_markup:admin_buttons
+            reply_markup:keyboards.mainAdminKeyboard
         })
 
     }else{
@@ -169,7 +162,7 @@ async function adminChannelConversation(conversation, ctx){
         let list = await channelControllers.adminChannels()
         if(list.data.length === 0){
             await ctx.reply("☹️ Sizda admin kanallar yo'q", {
-                reply_markup:admin_buttons,
+                reply_markup:keyboards.mainAdminKeyboard,
             })
 
 
@@ -252,7 +245,35 @@ Masalan: <i>https://t.me/+TKQnHeIZgb81YjVi</i>
 
     let res = await channelControllers.updatePrivateChannelLink(id, link)
     await ctx.reply('✅ Chanelga link ulandi',{
-        reply_markup:admin_buttons
+        reply_markup:keyboards.mainAdminKeyboard
+    })
+}
+async function deleteMovieByCodeConversation(conversation, ctx){
+    let keyboardBtn = new Keyboard()
+        .text("🛑 Bekor qilish")
+        .resized()
+    await ctx.reply(`Kino kodini yuboring
+    
+Masalan: <i>263</i>
+    `, {
+        reply_markup:keyboardBtn,
+        parse_mode:"HTML"
+    })
+
+    ctx = await conversation.wait()
+
+    if (!(Boolean(Number(ctx.message?.text)) || ctx.message?.text==='0')) {
+        do {
+            await ctx.reply("⚠️ <b>Noto'g'ri ma'lumot</b>\n\n <i>Kino kodini yuboring</i> ", {
+                parse_mode: "HTML",
+            });
+            ctx = await conversation.wait();
+        } while (!(Boolean(Number(ctx.message?.text)) || ctx.message?.text==='0'));
+    }
+    let code = ctx.message.text
+    let response = await movieController._deleteMovieByCode(code)
+    await ctx.reply(response.msg,{
+        reply_markup:keyboards.mainAdminKeyboard
     })
 }
 
@@ -273,7 +294,7 @@ bot.hears("🔗 Link qo'shish", async (ctx)=>{
         parse_mode:"HTML"
     })
 })
-bot.hears("⭐ Admin kanallar", async (ctx)=>{
+bot.hears("⭐ Reklama", async (ctx)=>{
     await ctx.conversation.enter("adminChannelConversation");
 })
 bot.hears("➕ Link", async (ctx)=>{
@@ -302,27 +323,10 @@ bot.hears("➕ Private Link", async (ctx)=>{
     }
 })
 
-bot.command('privateLink', async(ctx)=>{
-    // await ctx.conversation.enter("privateChannelLinkConversation");
-
-    let list = await channelControllers.privateChannels()
-    if(list.data.length>0){
-        ctx.session.session_db.adminChannels=[]
-        ctx.session.session_db.adminChannels = list.data.map((item)=>({
-            id:item._id,
-            name:item.title,
-            link:Boolean(item.channelLink)
-        }))
-        await ctx.reply('Kanalni tanlang', {
-            reply_markup:privateChannelMenu,
-            parse_mode:"HTML"
-        })
-
-
-    }else{
-        await ctx.reply("☹️ Sizda admin kanallar yo'q")
-    }
+bot.hears("🗑 Kino o'chirish", async (ctx)=>{
+    await ctx.conversation.enter("deleteMovieByCodeConversation");
 })
+
 
 
 

@@ -4,8 +4,8 @@ import channelControllers from "../controllers/channelControllers.js";
 import requestController from "../controllers/requestController.js";
 
 
-
-const bot = new Composer();
+const composer = new Composer();
+const bot = composer.chatType('private')
 
 
 

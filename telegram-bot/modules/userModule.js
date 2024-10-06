@@ -4,7 +4,7 @@ import userControllers from "../controllers/userControllers.js";
 import requestController from "../controllers/requestController.js";
 const bot = new Composer();
 
-
+import keyboards from "../keyboards/keyboards.js";
 
 bot.command('start', async (ctx)=>{
 
@@ -32,18 +32,8 @@ _Menga kino kodini yuboring!_
         }
         else{
 
-            const admin_buttons = new Keyboard()
-                .text("⬇️ Kino yuklash")
-                .text("⭐ Admin kanallar")
-                .row()
-                .text("✍️ Xabar yozish")
-                .text("🔗 Link qo'shish")
-                .row()
-                .text("📈 Dashboard")
-                .resized()
-
             await ctx.reply(`⚡️ Asosy menyu ⚡️`,{
-                reply_markup:admin_buttons
+                reply_markup:keyboards.mainAdminKeyboard
             })
         }
     }catch (error){

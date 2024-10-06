@@ -2,7 +2,7 @@ import { Composer,Keyboard } from "grammy"
 const bot = new Composer();
 import movieController from "../controllers/movieController.js";
 import {createConversation} from "@grammyjs/conversations";
-
+import keyboards from "../keyboards/keyboards.js";
 const pm = bot.chatType("private");
 
 
@@ -58,18 +58,9 @@ async function uploadMovieConversation(conversation, ctx){
     const result = await movieController._create(data)
 
     if(result.status){
-        const admin_buttons = new Keyboard()
-            .text("⬇️ Kino yuklash")
-            .text("⭐ Admin kanallar")
-            .row()
-            .text("✍️ Xabar yozish")
-            .text("🔗 Link qo'shish")
-            .row()
-            .text("📈 Dashboard")
-            .resized()
 
         await ctx.reply(`✅ Kino muvofaqiyati yuklandi`,{
-            reply_markup:admin_buttons
+            reply_markup:keyboards.mainAdminKeyboard
         })
 
     }else{
