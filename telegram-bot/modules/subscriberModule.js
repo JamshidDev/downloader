@@ -72,10 +72,8 @@ bot.use(async (ctx, next)=>{
                     parse_mode:"HTML"
                 })
             }catch (error){
-                console.log(error)
+                console.log('user blocked--->')
             }
-
-
 
         }else{
             await  next()
