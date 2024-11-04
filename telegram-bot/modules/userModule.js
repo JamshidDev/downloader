@@ -106,7 +106,7 @@ bot.on("chat_join_request", async(ctx)=>{
         channelId:ctx.update.chat_join_request.chat.id,
         userId:ctx.update.chat_join_request.from.id,
     }
-    await userControllers.store(data)
+    // await userControllers.store(data)
     await requestController.store(data2)
 })
 
