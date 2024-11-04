@@ -17,7 +17,6 @@ const bot = composer.chatType('private')
 const subscribeButton = new Menu("subscribeButton")
     .dynamic(async (ctx,range)=>{
         let list = await ctx.session.session_db.channels
-        console.log(list)
         list.forEach((item)=>{
             range
                 .url("➕ Obuna bo'lish", item.type ==='PublicChannel'? `https://t.me/${item.link}` : item.link)
@@ -43,12 +42,9 @@ bot.use(async (ctx, next)=>{
             const channel = channels[i]
 
             if(channel.type !== 'Link'){
-                console.log(channel.telegramId)
                 const chatMembers = await ctx.chatMembers.getChatMember(channel.telegramId, ctx.from.id)
-                console.log(chatMembers.status)
                 if(chatMembers.status === 'left'){
                     let joinRequest = await requestController.userSendJoinRequest(channel.telegramId, ctx.from.id)
-                    console.log(joinRequest)
                     if(joinRequest.success && !joinRequest.joinRequest){
                         subscribeStatus = true
                         ctx.session.session_db.channels.push({
@@ -67,7 +63,7 @@ bot.use(async (ctx, next)=>{
 
 
         if(subscribeStatus){
-            await ctx.reply(`
+            await ctx.api.sendMessage(ctx.from.id,`
 <i>🙅‍♂️ Kechirasiz <a href="tg://user?id=${ctx.from.id}">${ctx.from.first_name}</a> botimizdan foydalanish uchun ushbu kanallarga a'zo bo'lishingiz shart!</i>
         `, {
                 reply_markup:subscribeButton,
