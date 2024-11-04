@@ -5,7 +5,6 @@ dotenv.config();
 
 import adminModule from "./modules/adminModule.js"
 import configModule from "./modules/configModule.js"
-import channelModule from "./modules/channelModule.js"
 import userModule from "./modules/userModule.js";
 import overwriteCommandsModule from "./modules/overwriteCommandsModule.js";
 import movieModule from "./modules/movieModule.js";
@@ -35,7 +34,6 @@ bot.filter(async (ctx)=>ctx.config.superAdmin).use(nodeCronModule);
 
 // client module
 bot.filter(async (ctx)=> !ctx.config.superAdmin).use(subscriberModule);
-bot.filter(async (ctx)=> !ctx.config.superAdmin).use(channelModule);
 bot.filter(async (ctx)=>!ctx.config.superAdmin).use(clientModule);
 
 bot.api.setWebhook(_WEBHOOK_URL, {

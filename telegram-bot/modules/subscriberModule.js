@@ -63,18 +63,26 @@ bot.use(async (ctx, next)=>{
 
 
         if(subscribeStatus){
-            await ctx.api.sendMessage(ctx.from.id,`
+
+            try{
+                await ctx.api.sendMessage(ctx.from.id,`
 <i>🙅‍♂️ Kechirasiz <a href="tg://user?id=${ctx.from.id}">${ctx.from.first_name}</a> botimizdan foydalanish uchun ushbu kanallarga a'zo bo'lishingiz shart!</i>
         `, {
-                reply_markup:subscribeButton,
-                parse_mode:"HTML"
-            })
+                    reply_markup:subscribeButton,
+                    parse_mode:"HTML"
+                })
+            }catch (error){
+                console.log(error)
+            }
+
+
 
         }else{
             await  next()
         }
 
     }
+
 })
 
 
