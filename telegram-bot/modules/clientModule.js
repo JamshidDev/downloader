@@ -1,53 +1,74 @@
-import { Composer,Keyboard } from "grammy"
-import { Menu, MenuRange }  from "@grammyjs/menu"
-import movieController from "../controllers/movieController.js";
+import {Composer, InputFile, InputMediaBuilder} from "grammy"
+import {detectPlatformByUrl, Platforms} from "../../utils/index.js"
+import {downloadVideoFromYouTuBe, downloadVideoFromInstagram} from "../platform/index.js"
+import axios from "axios"
+import fs from "fs"
+import path from 'path';
+
+import { v4 as uuidv4 } from 'uuid';
 const bot = new Composer();
 
 const pm = bot.chatType("private");
 
 
-const movieSender = async (ctx, movie)=>{
-    let fileId = movie.fileId
-    let caption = movie.caption+`
-        
-🤖Bizning bot: @${ctx.me.username}        
-        `
-    await ctx.api.sendVideo(ctx.from.id, fileId, {
-        caption,
-    })
-}
+
 
 pm.on("message:text", async (ctx)=>{
     try{
-        const code = ctx.message.text
-        const result = await movieController._searchMovieByCode(code)
-        if(result.status && result.data?.length>0){
-            const movies = result.data
+        const url = ctx.message.text
+        const chatId = ctx.from.id
+        const platform = detectPlatformByUrl(url)
 
-            for(let i=0; i<movies.length; i++){
-                let movie = movies[i]
-                if(movie?.movies && Array.isArray(movie?.movies) && movie.movies.length>0){
-                    for(let j=0; j<movie.movies.length; j++){
-                        await movieSender(ctx,movie.movies[j])
-                    }
-                }else{
-                    await movieSender(ctx,movie)
-                }
-
-            }
-        }else if(result.status && result.data?.length===0){
-            await ctx.reply(`
-<b>❌ Kino topilmadi</b>
-
-<i>Iltimos kino kodi tog'riligini tekshiring!</i>
-        `, {
-                parse_mode:"HTML",
-            })
+        if(platform === Platforms.unknown){
+            await ctx.reply("Nomalum buyruq!")
+            return
         }
+        await ctx.reply("Kuting...")
+
+        if(platform === Platforms.instagram){
+            await downloadVideoFromInstagram(url, chatId)
+        }else if(platform === Platforms.youtube){
+            await downloadVideoFromYouTuBe(url, chatId)
+        }
+
+
+
     }catch (error){
         console.log(error)
     }
 
 })
+
+
+const sendVideo = async(videos, ctx)=>{
+
+    for(const item of videos){
+        const uniqueName = uuidv4() + '.mp4'
+        const filePath = path.join('./downloads', uniqueName)
+        console.log(filePath)
+        try{
+            await downloadVideo(item.url, filePath);
+            const video = InputMediaBuilder.video(new InputFile(filePath));
+        }catch (error){
+            console.log(error)
+        }
+    }
+
+}
+
+const downloadVideo = async (url, filePath)=>{
+    const writer = fs.createWriteStream(filePath);
+    const response = await axios({
+        url,
+        method: 'GET',
+        responseType: 'stream',
+    });
+    response.data.pipe(writer);
+    return new Promise((resolve, reject) => {
+        writer.on('finish', resolve)
+        writer.on('error', reject)
+    });
+
+}
 
 export default bot;

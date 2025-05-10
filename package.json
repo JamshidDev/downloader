@@ -6,25 +6,34 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "nodemon telegram-bot/bot.js",
+    "dev": "nodemon server.js"
   },
   "author": "\"Jamshid Rakhimov\"",
   "license": "ISC",
   "dependencies": {
+    "@bochilteam/scraper-snapsave": "^5.0.0",
+    "@distube/ytdl-core": "^4.16.10",
     "@grammyjs/chat-members": "^1.1.0",
     "@grammyjs/conversations": "^1.2.0",
     "@grammyjs/i18n": "^1.0.2",
     "@grammyjs/menu": "^1.2.1",
+    "btch-downloader": "^4.0.7",
+    "cheerio": "^1.0.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "file-type": "^20.5.0",
     "grammy": "^1.21.2",
     "https": "^1.0.0",
     "mongoose": "^8.2.4",
     "node-cron": "^3.0.3",
+    "snapsave-media-downloader": "^2.1.1",
     "uuid": "^10.0.0",
-    "winston": "^3.13.0"
+    "winston": "^3.13.0",
+    "youtube-dl-exec": "^3.0.20",
+    "ytdl-core": "^4.11.5"
   },
   "devDependencies": {
     "naive-ui": "^2.38.1"

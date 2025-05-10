@@ -18,13 +18,28 @@ const app = express()
 app.use(express.json())
 app.use(cors());
 
-
+import {downloadMedia} from "./telegram-bot/platform/source.js"
 
 app.use("/permission",permissionRouter);
 app.use("/role",roleRouter);
 app.use("/route",menuRouteRouter);
 app.use("/menu",menuRouter);
 app.use("/organization",organizationRouter);
+app.use("/download", async (req,res)=>{
+    try{
+        console.log(req.query.url)
+
+        const data = await downloadMedia(req.query.url)
+
+        res.status(200).json({
+            msg: "OK",
+            data:data,
+        })
+    }catch (error){
+
+    }
+
+});
 
 
 

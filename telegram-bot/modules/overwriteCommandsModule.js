@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const bot = new Composer();
-let AdminIdList = process.env.ADMIN_IDS;
+let AdminIdList = process.env.SUPER_ADMINS?.split(',')
 
 bot.use(async (ctx, next)=>{
     const superAdminTelegramIdList = AdminIdList
