@@ -1,24 +1,11 @@
 import { Composer, MemorySessionStorage, session } from "grammy"
-import { I18n} from "@grammyjs/i18n"
 import {chatMembers } from "@grammyjs/chat-members"
 import {conversations} from "@grammyjs/conversations"
-
+import {i18n} from "../i18n/index.js"
 
 
 const adapter = new MemorySessionStorage();
 const bot = new Composer();
-
-
-
-
-const i18n = new I18n({
-    defaultLocale: "uz",
-    useSession: true,
-    directory: "./telegram-bot/locales",
-    globalTranslationContext(ctx) {
-        return { first_name: ctx.from?.first_name ?? "" };
-    },
-});
 
 bot.use(i18n);
 bot.use(session({

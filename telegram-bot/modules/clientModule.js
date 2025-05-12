@@ -1,15 +1,12 @@
-import {Composer, InputFile, InputMediaBuilder} from "grammy"
+import {Composer} from "grammy"
 import {detectPlatformByUrl, Platforms} from "../../utils/index.js"
 import {downloadVideoFromYouTuBe, downloadVideoFromInstagram} from "../platform/index.js"
-import axios from "axios"
-import fs from "fs"
-import path from 'path';
+import dotenv from "dotenv"
+dotenv.config();
 
-import { v4 as uuidv4 } from 'uuid';
-const bot = new Composer();
-
+const bot = new Composer()
 const pm = bot.chatType("private");
-
+let token = process.env.BOT_TOKEN
 
 
 
@@ -23,12 +20,20 @@ pm.on("message:text", async (ctx)=>{
             await ctx.reply("Nomalum buyruq!")
             return
         }
-        await ctx.reply("Kuting...")
+        const msg = await ctx.reply("Kuting...")
 
+        const option = {
+            chatId:chatId,
+            msgId:msg.message_id,
+            format:null,
+            lang:'uz',
+            token,
+        }
+        console.log(msg.message_id)
         if(platform === Platforms.instagram){
             await downloadVideoFromInstagram(url, chatId)
         }else if(platform === Platforms.youtube){
-            await downloadVideoFromYouTuBe(url, chatId)
+            await downloadVideoFromYouTuBe(url,option)
         }
 
 
@@ -36,39 +41,37 @@ pm.on("message:text", async (ctx)=>{
     }catch (error){
         console.log(error)
     }
+})
+pm.on('callback_query:data', async (ctx)=>{
+    const data = ctx.callbackQuery.data.toString().split('*')
+    const messageId = ctx.callbackQuery.message.message_id
+    const chatId = ctx.from.id
+    const url ="https://www.youtube.com/"+data?.[0]
+    const msg = await ctx.reply("Kuting...")
+    const option = {
+        chatId:chatId,
+        msgId:msg.message_id,
+        format:null,
+        lang:'uz',
+        token,
+    }
+
+    await ctx.deleteMessages([messageId])
+    console.log(data)
+    if(data?.[1] === 'video'){
+        option.format = 'video'
+        await downloadVideoFromYouTuBe(url,option)
+    }else if(data?.[1] === 'audio'){
+        option.format = 'audio'
+        await downloadVideoFromYouTuBe(url,option)
+    }
+
+
+
+
+
 
 })
 
-
-const sendVideo = async(videos, ctx)=>{
-
-    for(const item of videos){
-        const uniqueName = uuidv4() + '.mp4'
-        const filePath = path.join('./downloads', uniqueName)
-        console.log(filePath)
-        try{
-            await downloadVideo(item.url, filePath);
-            const video = InputMediaBuilder.video(new InputFile(filePath));
-        }catch (error){
-            console.log(error)
-        }
-    }
-
-}
-
-const downloadVideo = async (url, filePath)=>{
-    const writer = fs.createWriteStream(filePath);
-    const response = await axios({
-        url,
-        method: 'GET',
-        responseType: 'stream',
-    });
-    response.data.pipe(writer);
-    return new Promise((resolve, reject) => {
-        writer.on('finish', resolve)
-        writer.on('error', reject)
-    });
-
-}
 
 export default bot;

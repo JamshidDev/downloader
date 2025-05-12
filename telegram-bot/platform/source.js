@@ -207,8 +207,6 @@ export const downloadMedia = (url) => {
             });
 
         } catch (error) {
-            console.log(error)
-            // Xato yuz bersa, xato xabarini qaytarish
             return resolve({
                 developer: "@Milan Bhandari",
                 status: false,

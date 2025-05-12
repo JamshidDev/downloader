@@ -1,20 +1,19 @@
 import axios from "axios"
 import { Worker, isMainThread, workerData, parentPort }  from 'worker_threads'
-const port = process.env.PORT;
 import {downloadMedia} from "./source.js"
 import path from 'path'
 import fs from 'fs'
 import { fileURLToPath } from 'url';
 dotenv.config();
 import dotenv from "dotenv"
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-let token = process.env.BOT_TOKEN;
+const __filename = fileURLToPath(import.meta.url)
 const storePath = './downloads'
 import { v4 as uuidv4 } from 'uuid';
 import {Bot, InputFile, InputMediaBuilder} from "grammy"
 import * as FileType from "file-type"
+import {i18n} from "../i18n/index.js"
 
+let token = process.env.BOT_TOKEN
 let fileExn = null
 
 
@@ -78,7 +77,16 @@ const separateThread = async ()=>{
         let mediaPaths = []
 
         const response = await downloadMedia(url)
-        for(const item of response.data){
+
+        if(!response.status){
+            await bot.api.sendMessage(chatId,i18n.t('uz','private_account_msg'), {
+                parse_mode:"HTML"
+            })
+            return
+        }
+
+        for(let i=0; i<response.data.length; i++){
+            const item = response.data[i]
             const uniqueName = uuidv4()
 
             const filePath = path.join(storePath, uniqueName)
@@ -86,9 +94,19 @@ const separateThread = async ()=>{
                 await downloadVideo(item.url, filePath)
                 let file = null
                 if(fileExn === 'mp4'){
-                    file = InputMediaBuilder.video(new InputFile(filePath),{ caption:`❤️@Zornavobot orqali yuklab olindi🚀 📥`})
+                    file = InputMediaBuilder.video(new InputFile(filePath),{
+                        ...(i===0? {
+                            caption:i18n.t('uz','media_caption'),
+                            parse_mode:"HTML"
+                        }:{})
+                    })
                 }else{
-                    file = InputMediaBuilder.photo(new InputFile(filePath), { caption:`❤️@Zornavobot orqali yuklab olindi🚀 📥`})
+                    file = InputMediaBuilder.photo(new InputFile(filePath), {
+                        ...(i===0? {
+                            caption:i18n.t('uz','media_caption'),
+                            parse_mode:"HTML"
+                        }:{})
+                    })
                 }
                 mediaGroups.push(file)
                 mediaPaths.push(filePath)
@@ -109,7 +127,7 @@ const separateThread = async ()=>{
 
 
     }catch (error){
-        console.log(error)
+        // console.log(error)
     }
 
 }
