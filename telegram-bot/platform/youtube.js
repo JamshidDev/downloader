@@ -10,7 +10,7 @@ const storePath = './downloads'
 import { v4 as uuidv4 } from 'uuid';
 import path from "path"
 import {i18n} from "../i18n/index.js"
-import cookiesJson from './cookie.json' assert {type :'json'}
+import cookiesJson from './cookie.json' assert {type: 'json'}
 const cookies = cookiesJson.map((v)=>({
     name:v.name,
     value:v.value,

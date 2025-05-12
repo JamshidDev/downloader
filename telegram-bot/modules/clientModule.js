@@ -14,8 +14,6 @@ const bot = new Composer()
 const pm = bot.chatType("private");
 let token = process.env.BOT_TOKEN
 
-const cookiePath = path.join(__dirname, "./cookie.json");
-import cookiesJson from '../platform/cookie.json' assert {type :'json'}
 
 
 
