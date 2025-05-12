@@ -3,10 +3,19 @@ import {detectPlatformByUrl, Platforms} from "../../utils/index.js"
 import {downloadVideoFromYouTuBe, downloadVideoFromInstagram} from "../platform/index.js"
 import dotenv from "dotenv"
 dotenv.config();
+import  fs from 'fs'
+import path from "path"
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const bot = new Composer()
 const pm = bot.chatType("private");
 let token = process.env.BOT_TOKEN
+
+const cookiePath = path.join(__dirname, "./cookie.json");
+import cookiesJson from '../platform/cookie.json' assert {type :'json'}
 
 
 
@@ -29,7 +38,6 @@ pm.on("message:text", async (ctx)=>{
             lang:'uz',
             token,
         }
-        console.log(msg.message_id)
         if(platform === Platforms.instagram){
             await downloadVideoFromInstagram(url, chatId)
         }else if(platform === Platforms.youtube){

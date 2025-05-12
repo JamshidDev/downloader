@@ -1,5 +1,7 @@
 import { Worker, isMainThread, workerData, parentPort }  from 'worker_threads'
 import ytdl from "@distube/ytdl-core"
+import pkg from '@distube/ytdl-core';
+const { createAgent, getInfo } = pkg;
 import  fs from 'fs'
 import {Bot, InlineKeyboard, InputFile, InputMediaBuilder} from "grammy"
 import {fileURLToPath} from "url"
@@ -8,6 +10,16 @@ const storePath = './downloads'
 import { v4 as uuidv4 } from 'uuid';
 import path from "path"
 import {i18n} from "../i18n/index.js"
+import cookiesJson from './cookie.json' assert {type :'json'}
+const cookies = cookiesJson.map((v)=>({
+    name:v.name,
+    value:v.value,
+}))
+const agentOptions = {
+    pipelining:0,
+    maxRedirections: 3,
+    timeout: 10000,
+};
 
 
 export  const downloadVideoFromYouTuBe = async (url,option) =>{
@@ -42,11 +54,15 @@ const separateThread = async ()=>{
                 const {url,option} = workerData
                 const bot = new Bot(option.token)
 
-                const info = await ytdl.getInfo(url)
+                const agent = createAgent(cookies, agentOptions)
+                const info = await getInfo(url, { agent });
+                console.log(info)
+                // const info = await ytdl.getInfo(url)
                 const thumbnails = info.videoDetails.thumbnails
                 const vThumbnail = info.videoDetails.thumbnails[thumbnails.length - 1].url
                 const vTitle =info.videoDetails.title
                 const urlParam = url.toString().replaceAll('https://youtube.com/','')
+
                 if(!option.format){
                     await bot.api.deleteMessages(option.chatId, [option.msgId])
                     await bot.api.sendPhoto(option.chatId, vThumbnail, {
